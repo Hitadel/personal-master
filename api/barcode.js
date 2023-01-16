@@ -1,6 +1,7 @@
 const express = require('express');
 const router  = express.Router();
 const sequelize = require('sequelize');
+// const {Barcode} = require('../models');
 
 
 router.get('/', async(req,res,next) => {
@@ -24,8 +25,10 @@ router.get('/', async(req,res,next) => {
     }
 })
 
-router.get('/select', async(req,res,next) => {
-    const {barcode_id} = req.body;
+router.post('/select', async(req,res,next) => {
+    // const {barcode_id} = req.body;
+    // let barcode_id = req.query.barcode_id;
+    let {barcode_id} = req.query;
     try{
         // $user = auth()->User();
         // if ($user != null)
@@ -45,13 +48,38 @@ router.get('/select', async(req,res,next) => {
             const array2 = json_decode(json2, TRUE);
             const result2 = array2['body']['items']['item'][0];
         } else {
-            result2 = 0;
+            const result2 = 0;
         }
     } else
     result2 = 0;
     return res.json({'result':result2});
     }catch(err){
         console.log(err);
+    }
+})
+
+router.post('/save', async(req,res,next) => {
+    const{DESC_KOR, ANIMAL_PLANT, NUTR_CONT1, SERVING_WT, NUTR_CONT2, NUTR_CONT3, 
+        NUTR_CONT4, NUTR_CONT5, NUTR_CONT6, NUTR_CONT7, NUTR_CONT8, NUTR_CONT9} = req.body;
+    try{
+        const newHistory = await History.create({
+            DESC_KOR, 
+            ANIMAL_PLANT, 
+            NUTR_CONT1, 
+            SERVING_WT, 
+            NUTR_CONT2, 
+            NUTR_CONT3, 
+            NUTR_CONT4, 
+            NUTR_CONT5, 
+            NUTR_CONT6, 
+            NUTR_CONT7, 
+            NUTR_CONT8, 
+            NUTR_CONT9
+        });
+        res.send("<script>alert('저장 완료.');</script>");
+    }catch(error){
+        res.send("<script>alert('저장 실패');</script>");
+        console.log(error);
     }
 })
 
