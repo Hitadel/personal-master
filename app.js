@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express(),
       bodyParser = require("body-parser");
-      port = 3080;
+      port = 8000;
 
 // place holder for the data
 const users = [];
@@ -18,7 +18,8 @@ const motion = require('./api/motion');
 app.use('/api/motion', motion);
 //라우팅
 
-app.use(cors({ credentials: true, origin: "http://localhost:3080" }));
+app.use(cors({ credentials: true, origin: "http://localhost:8000" }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 

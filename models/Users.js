@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(72),
         comment: "전화번호",
       },
+      status: {
+        type: DataTypes.BOOLEAN,
+        comment: "회원 상태"
+      }
     }, {
       charset: "utf8", // 한국어 설정
       collate: "utf8_general_ci", // 한국어 설정
@@ -38,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
          * Users안에 있는 "id값"을 "user_id라는 컬럼 이름"으로 UserInfo모델에 새로운 컬럼으로 추가한다.
          */
         Users.hasOne(models.Motions, {foreignKey: "user_id", sourceKey: 'id'}); //외래키 등록. 자식에게 줌
+        Users.hasOne(models.Boards, {foreignKey: "user_name", sourceKey: 'name'}); //외래키 등록. 자식에게 줌
         // example.belongsTo(models.Users, {foreignKey: "user_id", sourceKey: "id"}); // 외래키로 쓰는 녀석. 부모에게 받음
     };
   

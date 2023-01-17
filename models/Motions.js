@@ -33,6 +33,5 @@ module.exports = (sequelize, DataTypes) => {
       // Users.hasOne(models.Motions, {foreignKey: "user_id", sourceKey: 'id'}); //외래키 등록. 자식에게 줌
       Motions.belongsTo(models.Users, {foreignKey: "user_id", sourceKey: "id"}); // 외래키로 쓰는 녀석. 부모에게서 받음
   };
-  
     return Motions;
   };
