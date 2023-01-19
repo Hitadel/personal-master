@@ -1,29 +1,4 @@
-const express = require('express');
-const router  = express.Router();
-const sequelize = require('sequelize');
-// const {Barcode} = require('../models');
-
-
-router.get('/', async(req,res,next) => {
-    // const{query1, query2} = req.body;
-    try{
-        // let apiResult = await Article.findAll({
-        //     raw:true,
-        //     attributes:['article_id','article_title', 'useremail', 'category', 'article_content',
-        //         [sequelize.fn('date_format', sequelize.col('article_at'), '%Y-%m-%d'), 'article_at']],
-        //     order: [['article_id', 'DESC']],
-        //     limit: 10,
-        //     offset: (qna_page-1) * 10
-        // })
-        // res.json({
-        //     apiResult, apiResult2, nameArray
-        // })
-        console.log("예시입니다.");
-        // return res.redirect('/main');
-    }catch(error){
-        console.log(error);
-    }
-})
+import Barcode from "../models/Barcode";
 
 router.post('/select', async(req,res,next) => {
     // const {barcode_id} = req.body;
@@ -62,7 +37,7 @@ router.post('/save', async(req,res,next) => {
     const{DESC_KOR, ANIMAL_PLANT, NUTR_CONT1, SERVING_WT, NUTR_CONT2, NUTR_CONT3, 
         NUTR_CONT4, NUTR_CONT5, NUTR_CONT6, NUTR_CONT7, NUTR_CONT8, NUTR_CONT9} = req.body;
     try{
-        const newHistory = await History.create({
+        const newBarcode = await Barcode.create({
             DESC_KOR, 
             ANIMAL_PLANT, 
             NUTR_CONT1, 
@@ -79,14 +54,6 @@ router.post('/save', async(req,res,next) => {
         res.send("<script>alert('저장 완료.');</script>");
     }catch(error){
         res.send("<script>alert('저장 실패');</script>");
-        console.log(error);
-    }
-})
-
-router.get('/test', async(req,res,next) => {
-    try{
-        console.log("테스트");
-    }catch(error){
         console.log(error);
     }
 })
