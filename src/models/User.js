@@ -33,6 +33,11 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(72),
           allowNull: false,
         },
+        salt: {
+          // STRING (72자까지), Null 허용 X
+          type: Sequelize.STRING(72),
+          allowNull: false,
+        },
       },
       {
         sequelize,
