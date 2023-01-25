@@ -25,6 +25,10 @@ module.exports = class Motion extends Sequelize.Model {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
+        score: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
       },
       {
         sequelize,

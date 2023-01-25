@@ -4,7 +4,7 @@ import path from "path";
 import db from "./models";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { MotionRouter } from "./router";
+import { MotionRouter, BarcodeRouter } from "./router";
 
 const app = express();
 const logger = morgan("dev");
@@ -33,5 +33,6 @@ app.use(
 );
 
 app.use("/motion", MotionRouter); // MotionRouter 주소 부여, 연결
+app.use("/barcode", BarcodeRouter);
 
 export default app;
