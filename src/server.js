@@ -4,12 +4,20 @@ import path from "path";
 import db from "./models";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { MotionRouter } from "./router";
-import { SignupRouter } from "./router";
-import { BarcodeRouter } from "./router";
+import { MotionRouter, BarcodeRouter, SignupRouter } from "./router";
+import passport from "passport";
 
 const app = express();
 const logger = morgan("dev");
+
+//수정 부분 (패스포트)
+// app.use(passport.initialize());
+// app.use(passport.session());
+// app.post('/login', 
+// passport.authenticate('local', 
+// { successRedirect: '/',
+// failureRedirect: '/login' }));
+// 수정 부분
 
 db.sequelize
   .sync({ force: false }) // force: true (저장할 때마다 DB 초기화) / force: false (기존 DB에 덮어쓰기)
@@ -36,6 +44,6 @@ app.use(
 
 app.use("/motion", MotionRouter); // MotionRouter 주소 부여, 연결
 app.use("/signup", SignupRouter);
-// app.use("/barcode", BarcodeRouter);
+app.use("/barcode", BarcodeRouter);
 
 export default app;

@@ -1,7 +1,7 @@
-// import Board from "../models/Board";
+import Board from "../models/Board";
+const sequelize = require('sequelize');
 // const express = require('express');
 // const router = express.Router();
-// const sequelize = require('sequelize');
 // // const {Qna} = require('../models');
 
 // router.get('/', async (req, res, next) => {

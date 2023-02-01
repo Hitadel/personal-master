@@ -1,13 +1,62 @@
 import User from "../models/User";
 import crypto from "crypto";
+import nodemailer from "nodemailer";
+
+export const emailSend = async (req,res,next) => {
+  const useremail = req.params.id;
+  const sendEvfcode = crypto.randomBytes(3).toString('hex');
+  console.log(useremail);
+  console.log(sendEvfcode);
+
+  const smtpServerURL = "smtp.gmail`.com"
+  const authUser = process.env.NODEMAILER_USER
+  const authPass = process.env.NODEMAILER_PASS
+  const fromEmail = 'younggo1701077@gmail.com'
+  let toEmail = useremail;
+
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+  function sendEmail(toEmail, title, txt) {
+      let transporter = nodemailer.createTransport({
+          host: smtpServerURL,    //SMTP 서버 주소
+          secure: true,           //보안 서버 사용 false로 적용시 port 옵션 추가 필요
+          auth: {
+              user: authUser,     //메일서버 계정
+              pass: authPass      //메일서버 비번
+          }
+      });
+
+      let mailOptions = {
+          from: fromEmail,        //보내는 사람 주소
+          to: toEmail ,           //받는 사람 주소
+          subject: title,         //제목
+          text: txt               //본문
+      };
+
+      //전송 시작!
+      transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+              //에러
+              console.log(error);
+          }
+          //전송 완료
+          console.log("Finish sending email : ");
+          transporter.close()
+      })
+  }
+  res.json({sendEvfcode: sendEvfcode});
+  sendEmail(toEmail, "The Weighter에서 보낸 인증메일입니다.", `인증 번호: ${sendEvfcode}`)
+}
+
 
 export const signupCheck = async (req,res,next) => {
   try{
-    const {useremail} = req.body;
+    console.log("test");
+    const {email} = req.params;
     let flag = false;
     let result = await User.findAll({
         where: {
-            email: useremail
+            email
         }
     })
     if (result.length !== 0) {

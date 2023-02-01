@@ -33,11 +33,6 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(72),
           allowNull: false,
         },
-        salt: {
-          // STRING (72자까지), Null 허용 X
-          type: Sequelize.STRING(72),
-          allowNull: false,
-        },
       },
       {
         sequelize,
@@ -53,9 +48,9 @@ module.exports = class User extends Sequelize.Model {
   }
   static associate(db) {
     db.User.hasOne(db.Motion, { foreignKey: "user_id", sourceKey: "id" });
-    db.User.hasOne(db.Barcode, { foreignKey: "user_id", sourceKey: "id" });
-    db.User.hasOne(db.Comment, { foreignKey: "user_id", sourceKey: "id" });
-    db.User.hasOne(db.Board, { foreignKey: "user_id", sourceKey: "id" });
-    db.User.hasOne(db.Board, { foreignKey: "user_name", sourceKey: "name" });
+    // db.User.hasOne(db.Barcode, { foreignKey: "user_id", sourceKey: "id" });
+    // db.User.hasOne(db.Comment, { foreignKey: "user_id", sourceKey: "id" });
+    // db.User.hasOne(db.Board, { foreignKey: "user_id", sourceKey: "id" });
+    // db.User.hasOne(db.Board, { foreignKey: "user_name", sourceKey: "name" });
   }
 };

@@ -1,9 +1,8 @@
-// import express from "express";
-// import { BarcodeSave } from "../controller/signupController";
+import express from "express";
+import { saveBarcode } from "../controller/BarcodeController";
 
-// const SignupRouter = express.Router();
+const BarcodeRouter = express.Router();
 
-// SignupRouter.post("/post", BarcodeSave);
-// // 주소, 컨트롤러 (함수) 설정
+BarcodeRouter.post("/save", saveBarcode);
 
-// export default SignupRouter;
+export default BarcodeRouter;
