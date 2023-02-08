@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const Users = require('./models/User');
+import crypto from "crypto";
 
 
 module.exports = () => {
@@ -21,6 +22,12 @@ module.exports = () => {
     Users.findOne({ email: id }, (findError, user) => {
       if (findError) return done(findError); // 서버 에러 처리
       if (!user) return done(null, false, { message: '존재하지 않는 아이디입니다' }); // 임의 에러 처리
+
+    //   crypto.pbkdf2(password, user.salt, 9999, 64, 'sha512', (err, key) => {
+    //     if (err) reject(err);
+    //     resolve({ password: key.toString('base64'), salt });
+    // });
+
       return user.comparePassword(password, (passError, isMatch) => {
         if (isMatch) {
           return done(null, user); // 검증 성공

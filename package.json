@@ -21,6 +21,7 @@
     "mysql2": "^3.0.1",
     "nodemailer": "^6.9.0",
     "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "sequelize": "^6.28.0",
     "sequelize-cli": "^6.5.2"
   },

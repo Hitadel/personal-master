@@ -19,8 +19,8 @@ module.exports = class User extends Sequelize.Model {
           allowNull: false,
         },
         password: {
-          // STRING (60자까지), Null 허용 X
-          type: Sequelize.STRING(60),
+          // STRING (100자까지), Null 허용 X
+          type: Sequelize.STRING(100),
           allowNull: false,
         },
         name: {

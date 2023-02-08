@@ -4,7 +4,7 @@ import { emailSend, signupCheck, signupPost } from "../controller/signupControll
 const SignupRouter = express.Router();
 
 SignupRouter.post("/post", signupPost);
-SignupRouter.get('/emailCheck/:email', signupCheck);
+SignupRouter.post('/emailCheck', signupCheck);
 SignupRouter.post('/evf/:id', emailSend);
 // 주소, 컨트롤러 (함수) 설정
 

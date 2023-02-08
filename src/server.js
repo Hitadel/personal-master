@@ -6,17 +6,22 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { MotionRouter, BarcodeRouter, SignupRouter } from "./router";
 import passport from "passport";
+import passportConfig from "./passport";
 
 const app = express();
 const logger = morgan("dev");
 
 //수정 부분 (패스포트)
 // app.use(passport.initialize());
-// app.use(passport.session());
-// app.post('/login', 
-// passport.authenticate('local', 
-// { successRedirect: '/',
-// failureRedirect: '/login' }));
+// // app.use(passport.session());
+// app.use(passport.session({ secret: '비밀코드', resave: true, saveUninitialized: false }));
+// passportConfig();
+// const {isLoggedIn, isNotloggedIn} = require('./middlewares/loginConfirm');
+// app.get('/logout', isLoggedIn, (req, res) => {
+//   req.logout();
+//   passport.session.destroy();
+//   res.redirect('/');
+// });
 // 수정 부분
 
 db.sequelize
