@@ -7,22 +7,24 @@ import cors from "cors";
 import { MotionRouter, BarcodeRouter, SignupRouter } from "./router";
 import passport from "passport";
 import passportConfig from "./passport";
+import session from "express-session";
+import PassportRouter from "./router/PassportRouter";
 
 const app = express();
 const logger = morgan("dev");
 
-//수정 부분 (패스포트)
-// app.use(passport.initialize());
-// // app.use(passport.session());
-// app.use(passport.session({ secret: '비밀코드', resave: true, saveUninitialized: false }));
-// passportConfig();
-// const {isLoggedIn, isNotloggedIn} = require('./middlewares/loginConfirm');
-// app.get('/logout', isLoggedIn, (req, res) => {
-//   req.logout();
-//   passport.session.destroy();
-//   res.redirect('/');
-// });
-// 수정 부분
+//패스포트
+app.use(passport.initialize()); //passport 구동
+app.use(session({ secret: '비밀코드', resave: true, saveUninitialized: false })); //세션 활성화
+app.use(passport.session()); //세션 연결
+passportConfig();
+const {isLoggedIn, isNotloggedIn} = require('./middlewares/loginConfirm');
+app.get('/logout', isLoggedIn, (req, res) => {
+  req.logout();
+  passport.session.destroy();
+  res.redirect('/');
+});
+//패스포트
 
 db.sequelize
   .sync({ force: false }) // force: true (저장할 때마다 DB 초기화) / force: false (기존 DB에 덮어쓰기)
@@ -50,5 +52,6 @@ app.use(
 app.use("/motion", MotionRouter); // MotionRouter 주소 부여, 연결
 app.use("/signup", SignupRouter);
 app.use("/barcode", BarcodeRouter);
+app.use("/login", PassportRouter);
 
 export default app;

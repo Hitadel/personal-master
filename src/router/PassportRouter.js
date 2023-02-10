@@ -1,8 +1,11 @@
-const passport = require('passport');
+import passport from "passport";
+import express from "express";
+
 const PassportRouter = express.Router();
 
-PassportRouter.post("/login", passport.authenticate('local', {
-    failureRedirect: '/'
+PassportRouter.post("/post", passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login'
   }), (req, res) => {
     res.redirect('/');
   });
