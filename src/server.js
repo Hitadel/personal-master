@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { MotionRouter, BarcodeRouter, SignupRouter } from "./router";
 import passport from "passport";
-import passportConfig from "./passport";
+import passportConfig from "./controller/loginController";
 import session from "express-session";
 import PassportRouter from "./router/PassportRouter";
 
