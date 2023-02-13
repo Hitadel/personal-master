@@ -8,6 +8,7 @@ export const saveMotion = async (req, res, next) => {
 
     await Motion.create({
       // motion 테이블에 데이터 추가
+      user_id: req.user.id,
       type,
       count,
       time,

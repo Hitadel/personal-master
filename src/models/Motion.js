@@ -10,6 +10,10 @@ module.exports = class Motion extends Sequelize.Model {
           autoIncrement: true,
           primaryKey: true,
         },
+        user_id: {
+          type: Sequelize.INTEGER,
+          foreignKey: true,
+        },
         type: {
           // STRING (100자까지), Null 허용 X
           type: Sequelize.STRING(100),

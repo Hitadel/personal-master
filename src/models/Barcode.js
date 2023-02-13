@@ -9,6 +9,10 @@ module.exports = class Barcode extends Sequelize.Model {
           autoIncrement: true,
           primaryKey: true,
         },
+        user_id: {
+          type: Sequelize.INTEGER,
+          foreignKey: true,
+        },
         name: {
           type: Sequelize.STRING(100),
           allowNull: false,

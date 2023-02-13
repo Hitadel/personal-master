@@ -12,6 +12,7 @@ export const saveBarcode = async (req, res, next) => {
       req.body.data;
     await Barcode.create({
       name: DESC_KOR,
+      user_id: req.user.id,
       manufacturer: ANIMAL_PLANT,
       size: SERVING_WT,
       calorie: NUTR_CONT1,
