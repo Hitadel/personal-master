@@ -14,7 +14,11 @@ export const indexBoard = async(req, res, next) => {
 }
 export const showBoard = async(req, res, next) => {
     try{
-
+        const {id} = req.body
+        const result = await Board.findOne({
+            where: {id}
+        })
+        return res.status(200).json({result});
     }catch(err){
         console.error(err);
         next(err);
@@ -27,10 +31,10 @@ export const createBoard = async(req, res, next) => {
             title,
             content,
             category,
-            user_id: req.user.id,
-            user_name: req.user.name,
-            // user_id: req.body.id, //테스트용
-            // user_name: req.body.name, //테스트용
+            // user_id: req.user.id,
+            // user_name: req.user.name,
+            user_id: req.body.id, //테스트용
+            user_name: req.body.name, //테스트용
         })
         return res.status(200).json("SUCCESS");
     }catch(err){
