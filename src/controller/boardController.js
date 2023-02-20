@@ -38,10 +38,10 @@ export const createBoard = async(req, res, next) => {
             title,
             content,
             category,
-            // user_id: req.user.id,
-            // user_name: req.user.name,
-            user_id: req.body.id, //테스트용
-            user_name: req.body.name, //테스트용
+            user_id: req.user.id,
+            user_name: req.user.name,
+            // user_id: req.body.id, //테스트용
+            // user_name: req.body.name, //테스트용
         })
         return res.status(200).json("SUCCESS");
     }catch(err){
