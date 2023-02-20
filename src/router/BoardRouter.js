@@ -4,7 +4,7 @@ import { createBoard, updateBoard, deleteBoard, showBoard, indexBoard } from "..
 const BoardRouter = express.Router();
 
 BoardRouter.get("/index/:page/:limit", indexBoard);
-BoardRouter.post("/show/:id", showBoard);
+BoardRouter.get("/show/:id", showBoard);
 BoardRouter.post("/create", createBoard);
 BoardRouter.post("/update", updateBoard);
 BoardRouter.post("/delete", deleteBoard);
