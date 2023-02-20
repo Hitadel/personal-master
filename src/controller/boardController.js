@@ -2,8 +2,10 @@ import Board from "../models/Board";
 
 export const indexBoard = async(req, res, next) => {
     try{
+        const {page} = req.params.page;
         const result = await Board.findAll({
             order: [['createdAt', 'DESC']],
+            offset: page * 10,
             limit: 10,
         })
         return res.status(200).json({result});
