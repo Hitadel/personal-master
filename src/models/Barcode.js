@@ -9,10 +9,6 @@ module.exports = class Barcode extends Sequelize.Model {
           autoIncrement: true,
           primaryKey: true,
         },
-        user_id: {
-          type: Sequelize.INTEGER,
-          foreignKey: true,
-        },
         name: {
           type: Sequelize.STRING(100),
           allowNull: false,
@@ -75,6 +71,6 @@ module.exports = class Barcode extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Barcode.belongsTo(db.User, { foreignKey: "user_id", sourceKey: "id" });
+    db.Barcode.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
   }
 };

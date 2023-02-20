@@ -4,11 +4,10 @@ import path from "path";
 import db from "./models";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { MotionRouter, BarcodeRouter, SignupRouter } from "./router";
+import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter } from "./router";
 import passport from "passport";
 import passportConfig from "./controller/loginController";
 import session from "express-session";
-import PassportRouter from "./router/PassportRouter";
 
 const app = express();
 const logger = morgan("dev");
@@ -53,5 +52,6 @@ app.use("/motion", MotionRouter); // MotionRouter 주소 부여, 연결
 app.use("/signup", SignupRouter);
 app.use("/barcode", BarcodeRouter);
 app.use("/login", PassportRouter);
+app.use("/board", BoardRouter);
 
 export default app;

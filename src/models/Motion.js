@@ -47,6 +47,6 @@ module.exports = class Motion extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Motion.belongsTo(db.User, { foreignKey: "user_id", sourceKey: "id" });
+    db.Motion.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
   }
 };
