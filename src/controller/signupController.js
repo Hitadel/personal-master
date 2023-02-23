@@ -5,10 +5,8 @@ import nodemailer from "nodemailer";
 export const emailSend = async (req, res, next) => {
   const useremail = req.params.id;
   const sendEvfcode = crypto.randomBytes(3).toString("hex");
-  console.log(useremail);
-  console.log(sendEvfcode);
 
-  const smtpServerURL = "smtp.gmail`.com";
+  const smtpServerURL = "smtp.gmail.com";
   const authUser = process.env.NODEMAILER_USER;
   const authPass = process.env.NODEMAILER_PASS;
   const fromEmail = "younggo1701077@gmail.com";

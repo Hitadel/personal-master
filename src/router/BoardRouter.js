@@ -3,12 +3,12 @@ import { createBoard, updateBoard, deleteBoard, showBoard, indexBoard, createCom
 
 const BoardRouter = express.Router();
 
-BoardRouter.get("/index/:page/:limit", indexBoard);
-BoardRouter.get("/show/:id/:page/:limit/:asc", showBoard);
+BoardRouter.get("/index", indexBoard);
+BoardRouter.get("/show", showBoard);
 BoardRouter.post("/create", createBoard);
-BoardRouter.post("/comment/:board_id/create", createComment);
-BoardRouter.post("/comment/:board_id/update", updateComment);
-BoardRouter.post("/comment/:board_id/delete", deleteComment);
+BoardRouter.post("/comment/create", createComment);
+BoardRouter.post("/comment/update", updateComment);
+BoardRouter.post("/comment/delete", deleteComment);
 BoardRouter.post("/update", updateBoard);
 BoardRouter.post("/delete", deleteBoard);
 

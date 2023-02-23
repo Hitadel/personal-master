@@ -4,7 +4,7 @@ import { Sequelize } from "sequelize";
 
 export const indexBoard = async(req, res, next) => {
     try{
-        let {page, limit} = req.params;
+        let {page, limit} = req.query;
         page = parseInt(page); //params로 넘어올 땐 전부 {page: '10'} 식으로 값이 모두 문자열로 오니까 바꿔줘야됨
         limit = parseInt(limit);
         const result = await Board.findAll(
@@ -22,7 +22,10 @@ export const indexBoard = async(req, res, next) => {
 }
 export const showBoard = async(req, res, next) => {
     try{
-        const {id, asc} = req.params;
+        const {id, asc} = req.query;
+        let {page, limit} = req.query;
+        page = parseInt(page);
+        limit = parseInt(limit);
         const result = await Board.findOne({
             where: {id}
         })
@@ -30,9 +33,6 @@ export const showBoard = async(req, res, next) => {
             hit: result.hit + 1
         },  {where: {id}} )
         
-        let {page, limit} = req.params;
-        page = parseInt(page);
-        limit = parseInt(limit);
         let result2;
         if (asc)
             result2 = await Comment.findAll(
@@ -108,7 +108,7 @@ export const deleteBoard = async(req, res, next) => {
 export const createComment = async(req, res, next) => {
     try{
         const {content} = req.body
-        const {board_id} = req.params
+        const {board_id} = req.query
         const result = await Comment.create({
             content,
             user_id: req.user.id,
@@ -125,7 +125,7 @@ export const createComment = async(req, res, next) => {
 export const updateComment = async(req, res, next) => {
     try{
         let {content, id} = req.body
-        const {board_id} = req.params
+        const {board_id} = req.query
         content += " (수정됨)"
         const result = await Comment.update({
             content,
@@ -145,7 +145,7 @@ export const updateComment = async(req, res, next) => {
 export const deleteComment = async(req, res, next) => {
     try{
         const {id} = req.body
-        const {board_id} = req.params
+        const {board_id} = req.query
         const result = await Comment.destroy({
             where: {id}
         })

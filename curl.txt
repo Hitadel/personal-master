@@ -13,9 +13,14 @@ curl -d "title=TESTtitle&content=TESTcontent" --cookie jarfile "http://localhost
 게시물 조회 (true 오름차순. false 내림차순)
 curl localhost:8000/board/show/1/1/10/true
 curl localhost:8000/board/show/1/1/10/false
+curl localhost:8000/board/show?id=1&page=1&limit=10&asc=true
+?qna_page=${qna_page}
 코멘트 작성
 curl -d "content=TESTcontent" --cookie jarfile localhost:8000/board/comment/1/create
+curl -d "content=TESTcontent" --cookie jarfile localhost:8000/board/comment/create?id=1
 코멘트 수정
 curl -d "content=ModifiedContent&id=1" --cookie jarfile localhost:8000/board/comment/1/update
 코멘트 삭제
 curl -d "id=1" --cookie jarfile localhost:8000/board/comment/1/delete
+로그인 확인
+curl --cookie jarfile localhost:8000/isLogin
