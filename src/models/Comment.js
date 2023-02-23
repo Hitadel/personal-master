@@ -10,7 +10,7 @@ module.exports = class Comment extends Sequelize.Model {
           autoIncrement: true,
           primaryKey: true,
         },
-        context: {
+        content: {
           // TEXT, Null 허용 X
           type: Sequelize.TEXT,
           allowNull: false,
@@ -30,7 +30,7 @@ module.exports = class Comment extends Sequelize.Model {
   }
   static associate(db) {
     db.Comment.belongsTo(db.User, { foreignKey: "user_name", targetKey: "name" });
-    // db.Comment.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
+    db.Comment.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
     db.Comment.belongsTo(db.Board, { foreignKey: "board_id", targetKey: "id" });
   }
 };

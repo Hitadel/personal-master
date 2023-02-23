@@ -1,4 +1,5 @@
 import Board from "../models/Board";
+import Comment from "../models/Comment";
 import { Sequelize } from "sequelize";
 
 export const indexBoard = async(req, res, next) => {
@@ -21,11 +22,35 @@ export const indexBoard = async(req, res, next) => {
 }
 export const showBoard = async(req, res, next) => {
     try{
-        const {id} = req.params;
+        const {id, asc} = req.params;
         const result = await Board.findOne({
             where: {id}
         })
-        return res.status(200).json({result});
+        await Board.update({
+            hit: result.hit + 1
+        },  {where: {id}} )
+        
+        let {page, limit} = req.params;
+        page = parseInt(page);
+        limit = parseInt(limit);
+        let result2;
+        if (asc)
+            result2 = await Comment.findAll(
+            {   
+                order: [['id']],
+                limit,
+                offset: (page-1) * limit
+            },
+            )
+        else
+            result2 = await Comment.findAll(
+                {
+                    order: [['id', 'DESC']],
+                    limit,
+                    offset: (page-1) * limit
+                },
+                )
+        return res.status(200).json({result, result2});
     }catch(err){
         console.error(err);
         next(err);
@@ -40,8 +65,6 @@ export const createBoard = async(req, res, next) => {
             category,
             user_id: req.user.id,
             user_name: req.user.name,
-            // user_id: req.body.id, //테스트용
-            // user_name: req.body.name, //테스트용
         })
         return res.status(200).json("SUCCESS");
     }catch(err){
@@ -49,6 +72,7 @@ export const createBoard = async(req, res, next) => {
         next(err);
     }
 }
+
 export const updateBoard = async(req, res, next) => {
     try{
         const {title, content, category, id} = req.body
@@ -58,8 +82,6 @@ export const updateBoard = async(req, res, next) => {
             category,
             user_id: req.user.id,
             user_name: req.user.name,
-            // user_id: req.body.user_id, //테스트용
-            // user_name: req.body.user_name, //테스트용
         },
             {where: {id}}
     )
@@ -73,6 +95,58 @@ export const deleteBoard = async(req, res, next) => {
     try{
         const {id} = req.body
         const result = await Board.destroy({
+            where: {id}
+        })
+        return res.status(200).json("SUCCESS");
+
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+}
+
+export const createComment = async(req, res, next) => {
+    try{
+        const {content} = req.body
+        const {board_id} = req.params
+        const result = await Comment.create({
+            content,
+            user_id: req.user.id,
+            user_name: req.user.name,
+            board_id,
+        })
+        return res.status(200).json("SUCCESS");
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+}
+
+export const updateComment = async(req, res, next) => {
+    try{
+        let {content, id} = req.body
+        const {board_id} = req.params
+        content += " (수정됨)"
+        const result = await Comment.update({
+            content,
+            user_id: req.user.id,
+            user_name: req.user.name,
+            board_id,
+        },
+            {where: {id}}
+    )
+        return res.status(200).json("SUCCESS");
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+}
+
+export const deleteComment = async(req, res, next) => {
+    try{
+        const {id} = req.body
+        const {board_id} = req.params
+        const result = await Comment.destroy({
             where: {id}
         })
         return res.status(200).json("SUCCESS");
