@@ -30,7 +30,7 @@ app.get('/logout', isLoggedIn, (req, res) => {
 
 app.get('/isLogin', isLoggedIn, (req, res) => {
   const result = true
-  res.json(result);
+  res.json({result});
 });
 //패스포트
 

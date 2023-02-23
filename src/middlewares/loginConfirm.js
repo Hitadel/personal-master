@@ -3,7 +3,7 @@ exports.isLoggedIn = (req, res, next) => {
         next();
     } else {
         const result = false;
-        res.status(403).json(result);
+        res.status(403).json({result});
     }
 };
 
