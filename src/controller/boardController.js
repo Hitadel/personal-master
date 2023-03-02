@@ -22,35 +22,19 @@ export const indexBoard = async(req, res, next) => {
 }
 export const showBoard = async(req, res, next) => {
     try{
-        const {id, asc} = req.query;
-        let {page, limit} = req.query;
-        page = parseInt(page);
-        limit = parseInt(limit);
-        const result = await Board.findOne({
+        const {id} = req.query;
+        const data = await Board.findOne({
             where: {id}
         })
         await Board.update({
-            hit: result.hit + 1
+            hit: data.hit + 1
         },  {where: {id}} )
-        
-        let result2;
-        if (asc)
-            result2 = await Comment.findAll(
+        const comment = await Comment.findAll(
             {   
-                order: [['id']],
-                limit,
-                offset: (page-1) * limit
+                where: {board_id: id},
             },
             )
-        else
-            result2 = await Comment.findAll(
-                {
-                    order: [['id', 'DESC']],
-                    limit,
-                    offset: (page-1) * limit
-                },
-                )
-        return res.status(200).json({result, result2});
+        return res.status(200).json({data, comment});
     }catch(err){
         console.error(err);
         next(err);
@@ -76,6 +60,10 @@ export const createBoard = async(req, res, next) => {
 export const updateBoard = async(req, res, next) => {
     try{
         const {title, content, category, id} = req.body
+        const result2 = await Board.findOne({
+            where: {id}
+        });
+        if (result2.user_id == req.user.id) {
         const result = await Board.update({
             title,
             content,
@@ -86,6 +74,9 @@ export const updateBoard = async(req, res, next) => {
             {where: {id}}
     )
         return res.status(200).json("SUCCESS");
+    }
+    else 
+    return  res.status(403).send("해당 리소스에 접근할 권한이 없습니다.");
     }catch(err){
         console.error(err);
         next(err);
@@ -110,11 +101,17 @@ export const likeBoard = async(req, res, next) => {
 export const deleteBoard = async(req, res, next) => {
     try{
         const {id} = req.body
+        const result2 = await Board.findOne({
+            where: {id}
+        });
+        if (result2.user_id == req.user.id) {
         const result = await Board.destroy({
             where: {id}
         })
         return res.status(200).json("SUCCESS");
-
+    }
+    else 
+    return  res.status(403).send("해당 리소스에 접근할 권한이 없습니다.");
     }catch(err){
         console.error(err);
         next(err);
@@ -123,15 +120,17 @@ export const deleteBoard = async(req, res, next) => {
 
 export const createComment = async(req, res, next) => {
     try{
-        const {content} = req.body
-        const {board_id} = req.query
+        const {content, board_id} = req.body
         const result = await Comment.create({
             content,
             user_id: req.user.id,
             user_name: req.user.name,
             board_id,
-        })
-        return res.status(200).json("SUCCESS");
+        });
+        const data = await Comment.findAll({
+            where: {board_id}
+        });
+        return res.status(200).json(data);
     }catch(err){
         console.error(err);
         next(err);
@@ -140,9 +139,15 @@ export const createComment = async(req, res, next) => {
 
 export const updateComment = async(req, res, next) => {
     try{
-        let {content, id} = req.body
-        const {board_id} = req.query
+        let {content, id, board_id} = req.body
         content += " (수정됨)"
+        
+        const result2 = await Comment.findOne({
+            where: {id}
+        });
+        console.log("디버그")
+        console.log(result2.user_id , req.user.id);
+        if (result2.user_id == req.user.id) {
         const result = await Comment.update({
             content,
             user_id: req.user.id,
@@ -152,6 +157,10 @@ export const updateComment = async(req, res, next) => {
             {where: {id}}
     )
         return res.status(200).json("SUCCESS");
+    }
+    else 
+    return  res.status(403).send("해당 리소스에 접근할 권한이 없습니다.");
+
     }catch(err){
         console.error(err);
         next(err);
@@ -162,10 +171,17 @@ export const deleteComment = async(req, res, next) => {
     try{
         const {id} = req.body
         const {board_id} = req.query
-        const result = await Comment.destroy({
+        const result2 = await Comment.findOne({
             where: {id}
         })
-        return res.status(200).json("SUCCESS");
+        if (result2.user_id == req.user.id) {
+            const result = await Comment.destroy({
+                where: {id}
+            })
+            return res.status(200).json("SUCCESS");
+        }
+        else 
+        return  res.status(403).send("해당 리소스에 접근할 권한이 없습니다.");
 
     }catch(err){
         console.error(err);

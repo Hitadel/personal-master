@@ -7,7 +7,7 @@ curl -d "title=TESTtitle&content=TESTcontent" localhost:8000/board/create
 회원가입
 curl -d "email=test@test.com&name=TEST&phone=0101111111&password=password" localhost:8000/signup/post
 로그인 (로그인 후 jarfile에 쿠키 담음)
-curl --cookie-jar jarfile --data "id=test@test.com&pw=password" http://localhost:8000/login/post 
+curl --cookie-jar jarfile --data "id=test@test.com&pw=password!1" http://localhost:8000/login/post 
 게시물 작성(jarfile에 담긴 쿠키 정보 읽어와서 사용)
 curl -d "title=TESTtitle&content=TESTcontent" --cookie jarfile "http://localhost:8000/board/create" 
 게시물 조회 (true 오름차순. false 내림차순)
@@ -18,9 +18,11 @@ curl "localhost:8000/board/show?id=1&page=1&limit=10&asc=true"
 코멘트 작성
 curl -d "content=TESTcontent" --cookie jarfile localhost:8000/board/comment/1/create
 curl -d "content=TESTcontent" --cookie jarfile localhost:8000/board/comment/create?id=1
+curl -d "content=TESTcontent&board_id=1" --cookie jarfile localhost:8000/board/comment/create
 코멘트 수정
 curl -d "content=ModifiedContent&id=1" --cookie jarfile localhost:8000/board/comment/1/update
 curl -d "content=ModifiedContent&id=1" --cookie jarfile localhost:8000/board/comment/update?id=1
+curl -d "content=ModifiedContent&id=1&board_id=1" --cookie jarfile localhost:8000/board/comment/update
 코멘트 삭제
 curl -d "id=1" --cookie jarfile localhost:8000/board/comment/1/delete
 curl -d "id=1" --cookie jarfile localhost:8000/board/comment/delete?id=1

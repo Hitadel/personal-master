@@ -3,7 +3,7 @@ import crypto from "crypto";
 import nodemailer from "nodemailer";
 
 export const emailSend = async (req, res, next) => {
-  const useremail = req.params.id;
+  const useremail = req.body.id;
   const sendEvfcode = crypto.randomBytes(3).toString("hex");
 
   const smtpServerURL = "smtp.gmail.com";
