@@ -19,7 +19,7 @@ module.exports = () => {
     session: true, // 세션에 저장 여부
     passReqToCallback: false,
   }, async (id, password, done) => {
-    console.log(id, password);
+    // console.log(id, password);
     const result = await Users.findOne({where:{email: id}})
       if (result == null)
         return done(null, false, { message: '존재하지 않는 아이디입니다' }); // 임의 에러 처리

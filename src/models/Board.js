@@ -25,6 +25,10 @@ module.exports = class Board extends Sequelize.Model {
           type: Sequelize.INTEGER,
           defaultValue: 0,
         },
+        like: {
+          type: Sequelize.INTEGER,
+          defaultValue: 0
+        },
         category: {
           // STRING (100자까지), 기본 값 : "일반"
           type: Sequelize.STRING(100),

@@ -91,6 +91,22 @@ export const updateBoard = async(req, res, next) => {
         next(err);
     }
 }
+
+export const likeBoard = async(req, res, next) => {
+    try{
+        const {like, id} = req.body
+        const result = await Board.update({
+            like: like + 1
+        },
+            {where: {id}}
+    )
+        return res.status(200).json("SUCCESS");
+    }catch(err){
+        console.error(err);
+        next(err);
+    }
+}
+
 export const deleteBoard = async(req, res, next) => {
     try{
         const {id} = req.body
