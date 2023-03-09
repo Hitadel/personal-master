@@ -145,8 +145,6 @@ export const updateComment = async(req, res, next) => {
         const result2 = await Comment.findOne({
             where: {id}
         });
-        console.log("디버그")
-        console.log(result2.user_id , req.user.id);
         if (result2.user_id == req.user.id) {
         const result = await Comment.update({
             content,

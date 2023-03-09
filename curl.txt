@@ -8,6 +8,7 @@ curl -d "title=TESTtitle&content=TESTcontent" localhost:8000/board/create
 curl -d "email=test@test.com&name=TEST&phone=0101111111&password=password" localhost:8000/signup/post
 로그인 (로그인 후 jarfile에 쿠키 담음)
 curl --cookie-jar jarfile --data "id=test@test.com&pw=password!1" http://localhost:8000/login/post 
+curl -d "" -H "Authorization: Bearer 받아온토큰" http://localhost:8000/login/auth
 게시물 작성(jarfile에 담긴 쿠키 정보 읽어와서 사용)
 curl -d "title=TESTtitle&content=TESTcontent" --cookie jarfile "http://localhost:8000/board/create" 
 게시물 조회 (true 오름차순. false 내림차순)
