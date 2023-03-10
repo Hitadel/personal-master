@@ -17,7 +17,7 @@ const logger = morgan("dev");
 app.use(passport.initialize()); //passport 구동
 // app.use(session({ secret: '비밀코드', resave: true, saveUninitialized: false })); //세션 활성화
 // app.use(passport.session()); //세션 연결
-passportConfig();
+// passportConfig();
 
 // app.get('/logout', isLoggedIn, (req, res) => {
 //   if (req.user){

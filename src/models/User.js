@@ -37,6 +37,10 @@ module.exports = class User extends Sequelize.Model {
         salt: {
           type: Sequelize.STRING(100),
           allowNull: false,
+        },
+        token: {
+          type: Sequelize.STRING(255),
+          allowNull: true,
         }
       },
       {

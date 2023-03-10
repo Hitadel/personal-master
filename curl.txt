@@ -4,28 +4,37 @@ curl --cookie-jar cjar --output /dev/null localhost:8000
 curl -d --cookie cjar -d --cookie-jar cjar --data 'id=test@test.com' --data 'pw=password' --location --output loginresult.html localhost:8000/login
 curl -d "title=TESTtitle&content=TESTcontent" localhost:8000/board/create
 
+토큰 (메모용)
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJwYXNzd29yZCI6InlyTXlZZjhMSmdJMm5EKzl6TWR5MG1mYzZiaWx5NS82OXFPNE9DSVVaN0gvSmY5ck9zU1gvZm1IZGtuNEoyZVVZVnNXdDhKeEtwOG1wbFV3bXZkZ1VRPT0iLCJuYW1lIjoiVEVTVCIsInBob25lIjoiMDEwMTExMTExMSIsInNhbHQiOiJKYk1mYldMQk5sc0pNRy9ialVLTTNaREtmMTlodmI2ZzdnQ211VlBzSWNkRGlBOWUwMjArK0t0OUI0UEhnZm1tdHBOS0VYRlF2Vjd0RnYvMWpSV0lsZz09IiwidG9rZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMjMtMDMtMDlUMDI6Mjg6NDUuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjMtMDMtMDlUMDI6Mjg6NDUuMDAwWiJ9LCJpYXQiOjE2Nzg0MzAwNTMsImV4cCI6MTY3ODQzMzY1M30.l-PLfauYW_hMQtq1wbGXtd3VFD0E3H4fJnQwqBQ-6Dk
+
+
 회원가입
 curl -d "email=test@test.com&name=TEST&phone=0101111111&password=password" localhost:8000/signup/post
-로그인 (로그인 후 jarfile에 쿠키 담음)
-curl --cookie-jar jarfile --data "id=test@test.com&pw=password!1" http://localhost:8000/login/post 
+로그인 (로그인 후 jarfile에 쿠키 담음)  (--cookie-jar jarfile은 이제 필요없음. 이전 방식)
+curl --cookie-jar jarfile --data "id=test@test.com&pw=password" http://localhost:8000/login/post
 curl -d "" -H "Authorization: Bearer 받아온토큰" http://localhost:8000/login/auth
 게시물 작성(jarfile에 담긴 쿠키 정보 읽어와서 사용)
-curl -d "title=TESTtitle&content=TESTcontent" --cookie jarfile "http://localhost:8000/board/create" 
+curl -d "title=TESTtitle12&content=TESTcontent12" -H "Authorization: Bearer 받아온토큰" "http://localhost:8000/board/create" 
+게시판 조회
+curl localhost:8000/board/index/1/10
 게시물 조회 (true 오름차순. false 내림차순)
 curl localhost:8000/board/show/1/1/10/true
-curl localhost:8000/board/show/1/1/10/false
+curl localhost:8000/board/show/1
 curl "localhost:8000/board/show?id=1&page=1&limit=10&asc=true"
 ?qna_page=${qna_page}
-코멘트 작성
+코멘트 작성 (--cookie jarfile은 이전 방식. 이제 필요 없음)
 curl -d "content=TESTcontent" --cookie jarfile localhost:8000/board/comment/1/create
 curl -d "content=TESTcontent" --cookie jarfile localhost:8000/board/comment/create?id=1
 curl -d "content=TESTcontent&board_id=1" --cookie jarfile localhost:8000/board/comment/create
+curl -d "content=TESTcontent" -H "Authorization: Bearer 받아온토큰" localhost:8000/board/comment/1/create
 코멘트 수정
-curl -d "content=ModifiedContent&id=1" --cookie jarfile localhost:8000/board/comment/1/update
-curl -d "content=ModifiedContent&id=1" --cookie jarfile localhost:8000/board/comment/update?id=1
-curl -d "content=ModifiedContent&id=1&board_id=1" --cookie jarfile localhost:8000/board/comment/update
+curl -d "content=ModifiedContent&id=1" -H "Authorization: Bearer 받아온토큰" localhost:8000/board/comment/1/update
+curl -d "content=ModifiedContent&id=1" -H "Authorization: Bearer 받아온토큰" localhost:8000/board/comment/update?id=1
+curl -d "content=ModifiedContent&id=1&board_id=1" -H "Authorization: Bearer 받아온토큰" localhost:8000/board/comment/update
 코멘트 삭제
-curl -d "id=1" --cookie jarfile localhost:8000/board/comment/1/delete
-curl -d "id=1" --cookie jarfile localhost:8000/board/comment/delete?id=1
-로그인 확인
-curl --cookie jarfile localhost:8000/isLogin
+curl -d "id=1" -H "Authorization: Bearer 받아온토큰" localhost:8000/board/comment/delete
+curl -d "id=1" -H "Authorization: Bearer 받아온토큰" localhost:8000/board/comment/delete
+바코드 저장
+모션 저장
+curl -d "type=example&count=1&time=1&score=1" -H "Authorization: Bearer 받아온토큰" localhost:8000/motion/save
