@@ -4,7 +4,7 @@ import path from "path";
 import db from "./models";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter } from "./router";
+import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter } from "./router";
 import passport from "passport";
 import passportConfig from "./controller/loginController";
 // import session from "express-session";  
@@ -64,5 +64,6 @@ app.use("/signup", SignupRouter);
 app.use("/barcode", BarcodeRouter);
 app.use("/login", PassportRouter);
 app.use("/board", BoardRouter);
+app.use("/found_password", ResetPwRouter);
 
 export default app;
