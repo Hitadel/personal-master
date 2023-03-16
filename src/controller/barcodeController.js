@@ -1,12 +1,7 @@
 import Barcode from "../models/Barcode";
-import { decodeToken } from "../../util/token";
 
 export const saveBarcode = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-    const decoded = token ? decodeToken(token) : null;
-    if (!decoded || !decoded.user) 
-      return res.status(401).json({ message: "Invalid token" });
     for (const key in req.body.data){
       if(key == "DESC_KOR" || key == "ANIMAL_PLANT")
       continue;
@@ -17,7 +12,7 @@ export const saveBarcode = async (req, res, next) => {
       req.body.data;
     await Barcode.create({
       name: DESC_KOR,
-      user_id: decoded.user.id,
+      user_id: req.user.id,
       manufacturer: ANIMAL_PLANT,
       size: SERVING_WT,
       calorie: NUTR_CONT1,

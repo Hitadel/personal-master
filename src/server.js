@@ -7,17 +7,19 @@ import cors from "cors";
 import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter } from "./router";
 import passport from "passport";
 import passportConfig from "./controller/loginController";
-import session from "express-session";
+// import session from "express-session";  
 // const {isLoggedIn, isNotloggedIn} = require('./middlewares/loginConfirm');
 
 const app = express();
 const logger = morgan("dev");
 
 //패스포트
+
+
 app.use(passport.initialize()); //passport 구동
 // app.use(session({ secret: '비밀코드', resave: true, saveUninitialized: false })); //세션 활성화
 // app.use(passport.session()); //세션 연결
-// passportConfig();
+passportConfig();
 
 // app.get('/logout', isLoggedIn, (req, res) => {
 //   if (req.user){

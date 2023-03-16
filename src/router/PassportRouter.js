@@ -1,10 +1,6 @@
 import passport from "passport";
 import express from "express";
 import jwt from "jsonwebtoken";
-import {saveToken} from "../controller/loginController"
-const passportConfig = require('../controller/loginController');
-
-passportConfig();
 
 const PassportRouter = express.Router();
 
