@@ -4,11 +4,9 @@ import path from "path";
 import db from "./models";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter, AuthRouter } from "./router";
+import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter, AuthRouter, ProfileRouter } from "./router";
 import passport from "passport";
 import passportConfig from "./middlewares/passport";
-// import session from "express-session";  
-// const {isLoggedIn, isNotloggedIn} = require('./middlewares/loginConfirm');
 const redis = require('redis');
 const redisClient = require('./config/redisConfig');
 const app = express();
@@ -29,29 +27,12 @@ redisClient.on('error', function (err) {
 });
 redisClient.connect().then();
 
-// app.post('/logout', (req, res) => {
-//   const authHeader = req.headers.authorization;
-//   if (!authHeader) 
-//     return res.status(401).json("Authorization header is missing");;
-//   const token = authHeader.split(' ')[1];
-//   redisClient.del(token);
-//   return res.status(200).json({message: "SUCCESS"});;
-// });
-
-// app.get('/auth', passport.authenticate('jwt', { session: false }), (req, res) => {
-//   if (req.user) {
-//     res.send({ isLogined: true });
-//   } else {
-//     res.send({ isLogined: false });
-//   }
-// })
-
 //redis
 
 db.sequelize
   .sync({ force: false }) // force: true (저장할 때마다 DB 초기화) / force: false (기존 DB에 덮어쓰기)
   .then(() => {
-    console.log("DB연결 완료");
+    console.log("DB 연결 완료");
   })
   .catch((err) => {
     console.error(err);
@@ -78,5 +59,6 @@ app.use("/login", PassportRouter);
 app.use("/board", BoardRouter);
 app.use("/auth", AuthRouter);
 app.use("/found_password", ResetPwRouter);
+app.use("/profile", ProfileRouter);
 
 export default app;

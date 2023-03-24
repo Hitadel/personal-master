@@ -29,6 +29,10 @@ module.exports = class User extends Sequelize.Model {
           allowNull: false,
           unique: true,
         },
+        gender: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+        },
         phone: {
           // STRING (72자까지), Null 허용 X
           type: Sequelize.STRING(72),
@@ -56,6 +60,7 @@ module.exports = class User extends Sequelize.Model {
     db.User.hasMany(db.Barcode, { foreignKey: "user_id", sourceKey: "id" });
     db.User.hasMany(db.Comment, { foreignKey: "user_id", sourceKey: "id" });
     db.User.hasMany(db.Board, { foreignKey: "user_id", sourceKey: "id" });
-    db.User.hasMany(db.Board, { foreignKey: "user_name", sourceKey: "name" });
+    db.User.hasMany(db.Board, { foreignKey: "user_name", sourceKey: "name" })
+    db.User.hasMany(db.Comment, { foreignKey: "user_name", sourceKey: "name" })
   }
 };

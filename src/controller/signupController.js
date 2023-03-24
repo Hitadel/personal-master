@@ -70,8 +70,7 @@ export const signupCheck = async (req, res, next) => {
 // 계정 생성
 export const signupPost = async (req, res, next) => {
   try {
-    const { email, name, phone } = req.body;
-    let salt;
+    let { email, name, phone, gender, salt } = req.body;
 
     const createSalt = () =>
       new Promise((resolve, reject) => {
@@ -98,14 +97,20 @@ export const signupPost = async (req, res, next) => {
     // salt 반환 이유 : 각 유저의 비밀번호 암호화되는데 사용된 salt다르기 때문에, 유저마다 소유해야 비교 가능
 
     // 레인보우 테이블 방지를 위한 salt
-    await User.create({
+    if (gender == "male")
+    gender = true;
+    else 
+    gender = false;
+    const user = await User.create({
       email,
       name,
       phone,
       password,
       salt,
+      gender
     });
-    // 성공 시 클라이언트로 "SUCCESS" 메시지 응답
+    const updatedName = `${name}#${user.id}`;
+    await user.update({ name: updatedName });
     return res.status(200).json({result: true});
   } catch (err) {
     console.error(err);
