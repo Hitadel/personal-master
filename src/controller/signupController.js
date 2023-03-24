@@ -42,7 +42,7 @@ export const emailSend = async (req, res, next) => {
       transporter.close();
     });
   }
-  res.json({ sendEvfcode: sendEvfcode });
+  res.json({ data: sendEvfcode });
   sendEmail(toEmail, "The Weighter에서 보낸 인증메일입니다.", `인증 번호: ${sendEvfcode}`);
 };
 
@@ -58,9 +58,9 @@ export const signupCheck = async (req, res, next) => {
     });
 
     if (result.length === 0) {
-      return res.status(200).json(true);
+      return res.status(200).json({result: true});
     } else {
-      return res.status(200).json(false);
+      return res.status(200).json({result: false});
     }
   } catch (err) {
     console.error(err);
@@ -106,7 +106,7 @@ export const signupPost = async (req, res, next) => {
       salt,
     });
     // 성공 시 클라이언트로 "SUCCESS" 메시지 응답
-    return res.status(200).json("SUCCESS");
+    return res.status(200).json({result: true});
   } catch (err) {
     console.error(err);
     next(err);

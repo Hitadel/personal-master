@@ -16,7 +16,7 @@ export const saveMotion = async (req, res, next) => {
     });
 
     // 성공 시 클라이언트로 "SUCCESS" 메시지 응답
-    return res.status(200).json("SUCCESS");
+    return res.status(200).json({message: "SUCCESS"});
   } catch (err) {
     console.error(err);
     next(err);

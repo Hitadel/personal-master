@@ -4,37 +4,49 @@ import path from "path";
 import db from "./models";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter } from "./router";
+import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter, AuthRouter } from "./router";
 import passport from "passport";
-import passportConfig from "./controller/loginController";
+import passportConfig from "./middlewares/passport";
 // import session from "express-session";  
 // const {isLoggedIn, isNotloggedIn} = require('./middlewares/loginConfirm');
-
+const redis = require('redis');
+const redisClient = require('./config/redisConfig');
 const app = express();
 const logger = morgan("dev");
 
 //패스포트
-
-
 app.use(passport.initialize()); //passport 구동
-// app.use(session({ secret: '비밀코드', resave: true, saveUninitialized: false })); //세션 활성화
-// app.use(passport.session()); //세션 연결
 passportConfig();
-
-// app.get('/logout', isLoggedIn, (req, res) => {
-//   if (req.user){
-//     req.session.destroy();
-//     res.redirect('/');
-//   }
-//   else
-//   res.redirect('/');
-// });
-
-// app.get('/isLogin', isLoggedIn, (req, res) => {
-//   const result = true
-//   res.json({result});
-// });
 //패스포트
+
+//redis
+redisClient.on('connect', function() {
+  console.log('Redis client connected');
+});
+
+redisClient.on('error', function (err) {
+  console.log('Redis client error:', err);
+});
+redisClient.connect().then();
+
+// app.post('/logout', (req, res) => {
+//   const authHeader = req.headers.authorization;
+//   if (!authHeader) 
+//     return res.status(401).json("Authorization header is missing");;
+//   const token = authHeader.split(' ')[1];
+//   redisClient.del(token);
+//   return res.status(200).json({message: "SUCCESS"});;
+// });
+
+// app.get('/auth', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   if (req.user) {
+//     res.send({ isLogined: true });
+//   } else {
+//     res.send({ isLogined: false });
+//   }
+// })
+
+//redis
 
 db.sequelize
   .sync({ force: false }) // force: true (저장할 때마다 DB 초기화) / force: false (기존 DB에 덮어쓰기)
@@ -54,7 +66,7 @@ app.use(express.urlencoded({ limit: "20mb", extended: false }));
 
 app.use(
   cors({
-    origin: [process.env.NODE_ENV === "development" ? process.env.DEV_CLIENT_DOMAIN : process.env.PRODUCT_CLIENT_DOMAIN, "http://localhost:3001"],
+    origin: [process.env.NODE_ENV === "development" ? process.env.DEV_CLIENT_DOMAIN : process.env.PRODUCT_CLIENT_DOMAIN, "http://localhost:3000"],
     credentials: true,
   })
 );
@@ -64,6 +76,7 @@ app.use("/signup", SignupRouter);
 app.use("/barcode", BarcodeRouter);
 app.use("/login", PassportRouter);
 app.use("/board", BoardRouter);
+app.use("/auth", AuthRouter);
 app.use("/found_password", ResetPwRouter);
 
 export default app;

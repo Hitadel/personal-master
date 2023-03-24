@@ -26,7 +26,7 @@ export const saveBarcode = async (req, res, next) => {
       trans_fat: NUTR_CONT9,
     });
 
-    return res.status(200).json("SUCCESS");
+    return res.status(200).json({message: "SUCCESS"});
   } catch (err) {
     console.error(err);
     next(err);
