@@ -1,11 +1,11 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const Users = require('../models/User');
-import crypto from "crypto";
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const jwt = require('jsonwebtoken');
 const redisClient = require('../config/redisConfig');
+import {createHashedPassword} from "../utils/crypto"
 
 module.exports = () => {
   // passport.serializeUser((user, done) => { // Strategy 성공 시 호출됨
@@ -25,18 +25,11 @@ module.exports = () => {
     // console.log(id, password);
     const result = await Users.findOne({where:{email: id}})
       if (result == null)
-        return done(null, false, { message: '존재하지 않는 아이디입니다' }); // 임의 에러 처리
+        return done(null, false, { message: '존재하지 않는 아이디입니다.' }); // 임의 에러 처리
       else {
-        const createHashedPassword = (password) =>
-        new Promise(async (resolve, reject) => {
-          crypto.pbkdf2(password, result.dataValues.salt, 9999, 64, "sha512", (err, key) => {
-            if (err) reject(err);
-            resolve({password: key.toString("base64")});
-          });
-        });
-      const pwdObj = await createHashedPassword(password);
+      const pwdObj = await createHashedPassword(password, result.salt);
       const hash = pwdObj.password;
-        if (result.dataValues.password == hash){
+        if (result.password == hash){
             return done(null, result); // 검증 성공
           }
           else
@@ -54,7 +47,7 @@ module.exports = () => {
       const token = req.headers.authorization.split(' ')[1];
       const reply = await redisClient.get(token);
       if (reply)
-        return done(null, false, {message: '로그아웃됐습니다.'});
+        return done(401, false, {message: '로그아웃됐습니다.'});
       else
         return done(null, jwt_payload.user, {message: "Authorized"});
       } catch (err) {

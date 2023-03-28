@@ -1,5 +1,6 @@
 import express from "express";
 import { resetPassword } from "../controller/resetPwController";
+import passport from "passport";
 
 const ResetPwRouter = express.Router();
 

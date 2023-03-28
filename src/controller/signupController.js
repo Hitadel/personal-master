@@ -1,6 +1,7 @@
 import User from "../models/User";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import {createHashedPassword} from "../utils/crypto"
 
 export const emailSend = async (req, res, next) => {
   const useremail = req.body.id;
@@ -42,8 +43,8 @@ export const emailSend = async (req, res, next) => {
       transporter.close();
     });
   }
-  res.json({ data: sendEvfcode });
   sendEmail(toEmail, "The Weighter에서 보낸 인증메일입니다.", `인증 번호: ${sendEvfcode}`);
+  return res.json({ data: sendEvfcode });
 };
 
 // 이메일 전송
@@ -70,28 +71,11 @@ export const signupCheck = async (req, res, next) => {
 // 계정 생성
 export const signupPost = async (req, res, next) => {
   try {
-    let { email, name, phone, gender, salt } = req.body;
+    let { email, name, phone, gender} = req.body;
 
-    const createSalt = () =>
-      new Promise((resolve, reject) => {
-        crypto.randomBytes(64, (err, buf) => {
-          if (err) reject(err);
-          resolve(buf.toString("base64"));
-        });
-      });
-    
-    // 암호화 전 비밀번호를 받아 암호화 처리
-   const createHashedPassword = (plainPassword) =>
-      new Promise(async (resolve, reject) => {
-        salt = await createSalt(); // salt 만들어서 대입
-        crypto.pbkdf2(plainPassword, salt, 9999, 64, "sha512", (err, key) => {
-          if (err) reject(err);
-          resolve({password: key.toString("base64"), salt });
-        });
-      });
-
-      const pwdObj = await createHashedPassword(req.body.password);
-      const password = pwdObj.password;
+    const pwdObj = await createHashedPassword(req.body.password);
+    const salt = pwdObj.createdSalt;
+    const password = pwdObj.password;
 
     // => 최종적으로 암호화된 비밀번호, salt 반환
     // salt 반환 이유 : 각 유저의 비밀번호 암호화되는데 사용된 salt다르기 때문에, 유저마다 소유해야 비교 가능
@@ -114,6 +98,6 @@ export const signupPost = async (req, res, next) => {
     return res.status(200).json({result: true});
   } catch (err) {
     console.error(err);
-    next(err);
+    return res.status(500).json({message: "서버 에러가 발생하였습니다."});
   }
 };

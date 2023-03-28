@@ -9,10 +9,8 @@ const PassportRouter = express.Router();
 PassportRouter.post("/post", async (req, res, next) => {
   try {
     passport.authenticate('local', (passportError, user, info) => {
-      // console.log(user)
       if (passportError || !user) {
-        res.status(400).json({ message: info.message });
-        return;
+        return res.status(400).json({ message: info.message });;
       }
       req.login(user, { session: false }, (loginError) => {
         if (loginError) 
@@ -23,6 +21,7 @@ PassportRouter.post("/post", async (req, res, next) => {
     })(req, res, next);
   } catch (error) {
     console.error(error);
+    return res.status(500).json({message: "서버 에러가 발생하였습니다."});
   }
 });
 
