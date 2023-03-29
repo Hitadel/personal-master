@@ -85,4 +85,32 @@ const passwordModifyProfile = async (req, res, next) => {
   }
 }
 
-export {indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile}
+const statusModifyProfile = async (req, res, next) => {
+  try{
+    const {age, height, weight, disease, allergy} = req.body
+    console.log(req.body);
+  const status = await Status.update({
+    age,
+    height,
+    weight,
+    disease,
+    allergy
+  },{where:{id: req.user.id}});
+  if (!status[0]){
+    await Status.create({
+      user_id: req.user.id,
+      age,
+      height,
+      weight,
+      disease,
+      allergy
+    });
+  }
+  return res.status(200).json({result:true});
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message: "서버 에러가 발생하였습니다."});
+  }
+}
+
+export {indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile}

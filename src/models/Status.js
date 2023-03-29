@@ -11,23 +11,28 @@ module.exports = class Status extends Sequelize.Model {
         },
         age: {
           type: Sequelize.INTEGER,
-          allowNull: true,
+          allowNull: false,
+          defaultValue: 0,
         },
         height: {
           type: Sequelize.FLOAT,
-          allowNull: true,
+          allowNull: false,
+          defaultValue: 0,
         },
         weight: {
           type: Sequelize.FLOAT,
-          allowNull: true,
+          allowNull: false,
+          defaultValue: 0,
         },
         disease: {
           type: Sequelize.STRING,
-          allowNull: true,
+          allowNull: false,
+          defaultValue: "정보 없음",
         },
         allergy: {
           type: Sequelize.STRING,
-          allowNull: true,
+          allowNull: false,
+          defaultValue: "정보 없음",
         },
       },
       {
