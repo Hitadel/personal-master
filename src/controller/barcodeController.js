@@ -1,4 +1,4 @@
-import Barcode from "../models/Barcode";
+import Nutrition from "../models/Nutrition";
 
 export const saveBarcode = async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ export const saveBarcode = async (req, res, next) => {
     }
     const { DESC_KOR, SERVING_WT, NUTR_CONT1, NUTR_CONT2, NUTR_CONT3, NUTR_CONT4, NUTR_CONT5, NUTR_CONT6, NUTR_CONT7, NUTR_CONT8, NUTR_CONT9, ANIMAL_PLANT } =
       req.body.data;
-    await Barcode.create({
+    await Nutrition.create({
       name: DESC_KOR,
       user_id: req.user.id,
       manufacturer: ANIMAL_PLANT,

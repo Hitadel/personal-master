@@ -6,7 +6,8 @@ export default {
     host: process.env.DEV_HOST, // 127.0.0.1 or localhost
     dialect: process.env.DEV_DIALECT, // mysql
     dateStrings: true, // String으로 날짜를 받을 수 있음
-    timezone: "+09:00", // GMT 기준 한국 시간
+    // timezone: "+09:00", // GMT 기준 한국 시간
+    // logging: false
   },
   test: {
     username: "",

@@ -1,6 +1,6 @@
 import Sequelize from "sequelize";
 
-module.exports = class Barcode extends Sequelize.Model {
+module.exports = class Nutrition extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
@@ -60,10 +60,10 @@ module.exports = class Barcode extends Sequelize.Model {
       },
       {
         sequelize,
-        timestampa: true,
+        timestamp: true,
         underscored: false,
-        modelName: "Barcode",
-        tableName: "barcode",
+        modelName: "Nutrition",
+        tableName: "Nutrition",
         paranoid: true,
         charset: "utf8",
         collate: "utf8_unicode_ci",
@@ -71,6 +71,6 @@ module.exports = class Barcode extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Barcode.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
+    db.Nutrition.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
   }
 };

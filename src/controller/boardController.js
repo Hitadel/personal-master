@@ -90,22 +90,22 @@ export const updateBoard = async(req, res, next) => {
     }
 }
 
-export const likeBoard = async(req, res, next) => {
-    try{
-        const {like, id} = req.body
-        if (!like || !id)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
-        const result = await Board.update({
-            like: like + 1
-        },
-            {where: {id}}
-    )
-        return res.status(200).json({result: true});
-    }catch(err){
-        console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
-    }
-}
+// export const likeBoard = async(req, res, next) => {
+//     try{
+//         const {like, id} = req.body
+//         if (!like || !id)
+//         return res.status(400).json({ message: '필수값이 누락되었습니다.' });
+//         const result = await Board.update({
+//             like: like + 1
+//         },
+//             {where: {id}}
+//     )
+//         return res.status(200).json({result: true});
+//     }catch(err){
+//         console.error(err);
+//         return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+//     }
+// }
 
 export const deleteBoard = async(req, res, next) => {
     try{
