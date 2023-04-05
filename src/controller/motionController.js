@@ -11,7 +11,7 @@ export const saveMotion = async (req, res, next) => {
       user_id: req.user.id,
       type,
       count,
-      time,
+      timer: time,
       score,
     });
 

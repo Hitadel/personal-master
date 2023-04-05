@@ -19,7 +19,7 @@ module.exports = class Motion extends Sequelize.Model {
           type: Sequelize.STRING(100),
           allowNull: false,
         },
-        time: {
+        timer: {
           // INT, Null 허용 X
           type: Sequelize.INTEGER,
           allowNull: false,
@@ -36,11 +36,11 @@ module.exports = class Motion extends Sequelize.Model {
       },
       {
         sequelize,
-        timestamps: false,
+        timestamps: true,
         underscored: false,
         modelName: "Motion",
         tableName: "motion",
-        paranoid: false,
+        paranoid: true,
         charset: "utf8",
         collate: "utf8_unicode_ci",
       }

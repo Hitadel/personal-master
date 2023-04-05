@@ -16,7 +16,7 @@ export const saveBarcode = async (req, res, next) => {
       manufacturer: ANIMAL_PLANT,
       size: SERVING_WT,
       calorie: NUTR_CONT1,
-      carb: NUTR_CONT2,
+      cho: NUTR_CONT2,
       protein: NUTR_CONT3,
       fat: NUTR_CONT4,
       sugars: NUTR_CONT5,
@@ -25,7 +25,6 @@ export const saveBarcode = async (req, res, next) => {
       satur_fat: NUTR_CONT8,
       trans_fat: NUTR_CONT9,
     });
-
     return res.status(200).json({message: "SUCCESS"});
   } catch (err) {
     console.error(err);

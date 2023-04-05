@@ -25,7 +25,7 @@ module.exports = class Nutrition extends Sequelize.Model {
           type: Sequelize.DOUBLE,
           allowNull: false,
         },
-        carb: {
+        cho: {
           type: Sequelize.DOUBLE,
           allowNull: true,
         },

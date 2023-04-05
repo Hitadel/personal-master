@@ -1,4 +1,5 @@
 import Status from "../models/Status";
+import Motion from "../models/Motion";
 import User from "../models/User";
 import Nutrition from "../models/Nutrition";
 import jwt from "jsonwebtoken";
@@ -116,59 +117,159 @@ const statusModifyProfile = async (req, res, next) => {
   }
 }
 
-const nutritionCalculator = async(date, req, period) => {
+const modelPeriodCalculator = async(date, req, period, model, modelCondition) => {
   let condition = 24 * 60 * 60 * 1000; // 하루 뒤 만들기 위한 조건 (24시간)
-  const trueDate = new Date(Date.parse(date) + condition); // 하루 뒤
+  const startDate = new Date(Date.parse(date) + condition); // 하루 뒤
   condition *= period; // 기간 조건
-  const condition1 = new Date(trueDate.getTime() - condition); // 시작
-  const condition2 = trueDate; // 끝
-  console.log(condition1, "컨디션1", condition2, "컨디션2")
-  return await Nutrition.findAll({
-    where: {
-      user_id: req.user.id,
-      createdAt: { [Op.between]: [condition1, condition2] }} //시작과 끝
-    })
+  const condition1 = new Date(startDate.getTime() - condition); // 시작
+  const condition2 = startDate; // 끝
+  const whereClause = {
+    user_id: req.user.id,
+    createdAt: { [Op.between]: [condition1, condition2] }
+  };
+  if (modelCondition) {
+    whereClause.type = modelCondition;
+  }
+  return await model.findAll({
+    where: whereClause
+  });
+}
+
+const addModelToResult = (input, framework, timeIndex) => {
+  Object.keys(input[timeIndex]).forEach(key => {
+    if (Object.keys(framework).includes(key)) {
+      if (key == "createdAt" || key == "type")
+      input[timeIndex][key] = framework[key];
+      else
+      input[timeIndex][key] += framework[key];
+    }
+  });
+  return input[timeIndex];
+}
+
+const forEachFunction = (model, input, period, date) => {
+  let startDate, endDate, time, timeIndex
+  let condition = 24 * 60 * 60 * 1000; // 하루 뒤 만들기 위한 조건 (24시간)
+  if (period == "week"){
+    startDate = new Date(Date.parse(date) + condition) // 하루 뒤
+    endDate = new Date(startDate - 7 * 24 * 60 * 60 * 1000).getDate(); 
+  }
+  console.log(startDate, "언제란겨");
+  model.forEach((instances) => {
+    console.log(instances.createdAt, "띠용");
+    let framework = {}
+    if (period === "day")
+    time = new Date(instances.createdAt).getHours(); // 발생 일자
+    else if (period === "week")
+    time = new Date(instances.createdAt).getDate(); // 발생 일자
+    else if (period === "month")
+    time = new Date(instances.createdAt).getDate(); // 발생 일자
+    else
+    time = new Date(instances.createdAt).getMonth() + 1; // 발생 일자
+    for (const key in instances.dataValues)
+      if (key !== 'createdAt' || 'type')
+      framework[key] = instances.dataValues[key];
+    if (period === "day"){
+    if (time >= 0 && time < 5) //야식 또는 새벽
+    input[3] = addModelToResult(input, framework, 3);
+    else if (time >= 5 && time < 11) //아침
+      input[0] = addModelToResult(input, framework, 0);
+    else if (time >= 11 && time < 17) //점심
+      input[1] = addModelToResult(input, framework, 1);
+    else if (time >= 17 && time <= 23) //저녁
+      input[2] = addModelToResult(input, framework, 2);
+      return input;
+    } else {
+      if (period === "week"){
+      let minus = new Date(date).getDate() - 6;
+      timeIndex = time - minus;
+      if (timeIndex > 6 || timeIndex < 0){
+        minus = endDate
+        timeIndex = time - minus;
+      }
+    }
+      else if (period === "month"){
+        if (time <= 0 || time > 31) return; // 잘못된 날짜는 무시합니다.
+      timeIndex = time - 1; // 일자에 맞는 인덱스를 계산합니다.
+    }
+    else{
+    if (time <= 0 || time > 12) return;
+    timeIndex = time - 1;
+    }
+      return input[timeIndex] = addModelToResult(input, framework, timeIndex);
+}});
 }
 
 
 const nutritionProfile = async (req, res, next) => {
   try{
-    const {period, date} = req.body
-    // console.log(date, "받아온 거", trueDate, "하루 뒤", period);
-    // const trueDate = new Date(Date.parse(date));
+    const {period, date, newData} = req.body
     let period2, result;
     if (period === "day") period2 = 1
     if (period === "week") period2 = 7
     if (period === "month") period2 = 31
-    let nutrition = await nutritionCalculator(date, req, period2);
+    if (period === "year") period2 = 365
+    let nutrition = await modelPeriodCalculator(date, req, period2, Nutrition);
     if (period === "day"){
-      result = {
-        '15:00-21:00': 0,
-        '21:00-03:00': 0,
-        '03:00-09:00': 0,
-        '09:00-15:00': 0,
-      };
-      nutrition.forEach((nutrition) => {
-        const time = new Date(nutrition.createdAt).getHours(); // 발생 시간 (시간 단위)
-        if (time >= 15 && time < 21) { // 15시~21시 구간 00:00 ~ 06:00
-          result['야식'] += nutrition.calorie;
-        } else if (time >= 21 || time < 3) { // 21시~3시 구간 06:00 ~ 12:00
-          result['아침'] += nutrition.calorie;
-        } else if (time >= 3 && time < 9) { // 3시~9시 구간 12:00 ~ 18:00
-          result['점심'] += nutrition.calorie;
-        } else if (time >= 9 && time < 15) { // 9시~15시 구간 18:00 ~ 24:00
-          result['저녁'] += nutrition.calorie;
-        }
-      });
+      result = Array.from({ length: 4 }, (_, i) => ({ time: ["아침", "점심", "저녁", "야식"][i], calorie: 0, cho: 0, protein: 0, fat: 0, createdAt: 0, createdAt: 0 }));
+      forEachFunction(nutrition, result, period)
+    }
+    if (period === "week"){
+      result = Array.from({ length: 7 }, (_, i) => ({ time: `${i+1}일`, calorie: 0, cho: 0, protein: 0, fat: 0, createdAt: 0 }));
+      forEachFunction(nutrition, result, period, date)
     }
 
-    console.log(nutrition, "결과1");
-    console.log(result, "결과");
-  return res.status(200).json({nutrition});
+    if (period === "month"){
+      result = Array.from({ length: 31 }, (_, i) => ({ time: `${i+1}일`, calorie: 0, cho: 0, protein: 0, fat: 0, createdAt: 0 }));
+      forEachFunction(nutrition, result, period)
+    }
+
+    if (period === "year"){
+      result = Array.from({ length: 12 }, (_, i) => ({ time: `${i+1}월`, calorie: 0, cho: 0, protein: 0, fat: 0, createdAt: 0 }));
+      forEachFunction(nutrition, result, period)
+    }
+
+  return res.status(200).json(result);
   }catch(err){
     console.error(err)
     return res.status(500).json({message: "서버 에러가 발생하였습니다."});
   }
 }
 
-export {indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, nutritionProfile}
+const exerciseProfile = async (req, res, next) => {
+  try{
+    const {period, date, condition} = req.body
+    console.log(date,"봅니다")
+    let period2, result;
+    if (period === "day") period2 = 1
+    if (period === "week") period2 = 7
+    if (period === "month") period2 = 31
+    if (period === "year") period2 = 365
+    let motion = await modelPeriodCalculator(date, req, period2, Motion, condition);
+    if (period === "day"){
+      result = Array.from({ length: 4 }, (_, i) => ({ time: ["아침", "점심", "저녁", "새벽"][i], type: 0, count: 0, score: 0, timer: 0, createdAt: 0}));
+      forEachFunction(motion, result, period)
+    }
+    if (period === "week"){
+      result = Array.from({ length: 7 }, (_, i) => ({ time: `${i+1}일`, type: 0, count: 0, score: 0, timer: 0, createdAt: 0}));
+      forEachFunction(motion, result, period, date)
+    }
+
+    if (period === "month"){
+      result = Array.from({ length: 31 }, (_, i) => ({ time: `${i+1}일`, type: 0, count: 0, score: 0, timer: 0, createdAt: 0}));
+      forEachFunction(motion, result, period)
+    }
+
+    if (period === "year"){
+      result = Array.from({ length: 12 }, (_, i) => ({ time: `${i+1}월`, type: 0, count: 0, score: 0, timer: 0, createdAt: 0}));
+      forEachFunction(motion, result, period)
+    }
+
+  return res.status(200).json(result);
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message: "서버 에러가 발생하였습니다."});
+  }
+}
+
+export {indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, nutritionProfile, exerciseProfile}
