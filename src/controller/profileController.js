@@ -2,6 +2,8 @@ import Status from "../models/Status";
 import Motion from "../models/Motion";
 import User from "../models/User";
 import Nutrition from "../models/Nutrition";
+import ExercisePlan from "../models/ExercisePlan";
+import NutritionPlan from "../models/NutritionPlan";
 import jwt from "jsonwebtoken";
 import redisClient from "../config/redisConfig";
 import {createHashedPassword} from "../utils/crypto"
@@ -272,4 +274,24 @@ const exerciseProfile = async (req, res, next) => {
   }
 }
 
-export {indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, nutritionProfile, exerciseProfile}
+const aiPlan = async (req, res, next) => {
+  try{
+    const {category} = req.body
+    let result
+    if (category == "exercise")
+    result = await ExercisePlan.findAll({
+      where: {user_id: req.user.id}
+    })
+    else if (category == "nutrition")
+    result = await NutritionPlan.findAll({
+      where: {user_id: req.user.id}
+    })
+    console.log(result)
+  return res.status(200).json({result});
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message: "서버 에러가 발생하였습니다."});
+  }
+}
+
+export {indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, nutritionProfile, exerciseProfile, aiPlan}

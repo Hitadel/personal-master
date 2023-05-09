@@ -4,7 +4,7 @@ import path from "path";
 import db from "./models";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter, AuthRouter, ProfileRouter } from "./router";
+import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter, AuthRouter, ProfileRouter, PlannerRouter } from "./router";
 import passport from "passport";
 import passportConfig from "./middlewares/passport";
 const redis = require('redis');
@@ -60,5 +60,6 @@ app.use("/board", BoardRouter);
 app.use("/auth", AuthRouter);
 app.use("/found_password", ResetPwRouter);
 app.use("/profile", ProfileRouter);
+app.use("/planner", PlannerRouter);
 
 export default app;

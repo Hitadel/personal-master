@@ -1,5 +1,5 @@
 import express from "express";
-import { indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, nutritionProfile, exerciseProfile } from "../controller/profileController";
+import { indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, nutritionProfile, exerciseProfile, aiPlan } from "../controller/profileController";
 import passport from "passport";
 
 const ProfileRouter = express.Router();
@@ -11,5 +11,6 @@ ProfileRouter.post("/passwordModify", passport.authenticate('jwt', { session: fa
 ProfileRouter.post("/statusModify", passport.authenticate('jwt', { session: false }),  statusModifyProfile);
 ProfileRouter.post("/nutrition", passport.authenticate('jwt', { session: false }),  nutritionProfile);
 ProfileRouter.post("/exercise", passport.authenticate('jwt', { session: false }),  exerciseProfile);
+ProfileRouter.post("/aiPlan", passport.authenticate('jwt', { session: false }),  aiPlan);
 
 export default ProfileRouter;
