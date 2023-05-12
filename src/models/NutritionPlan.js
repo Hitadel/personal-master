@@ -10,37 +10,41 @@ module.exports = class NutritionPlan extends Sequelize.Model {
           autoIncrement: true,
           primaryKey: true,
         },
-        food: {
+        createdAt: {
+          type: Sequelize.DATE,
+          allowNull: false,
+        },
+        name: {
           // STRING (100자까지), Null 허용 X
           type: Sequelize.STRING(100),
           allowNull: false,
         },
-        kcal: {
+        calorie: {
           // INT, 기본 값 : 0
-          type: Sequelize.INTEGER,
+          type: Sequelize.DOUBLE,
           allowNull: false,
           defaultValue: 0,
         },
         protein: { // 단백질
           // INT, 기본 값 : 0
-          type: Sequelize.INTEGER,
+          type: Sequelize.DOUBLE,
           allowNull: false,
           defaultValue: 0,
         },  
         fat: { // 지방
           // INT
-          type: Sequelize.INTEGER,
+          type: Sequelize.DOUBLE,
           allowNull: false,
         },
-        carb: { // 탄수화물
+        cho: { // 탄수화물
           // INT
-          type: Sequelize.INTEGER,
+          type: Sequelize.DOUBLE,
           allowNull: false,
         },          
       },
       {
         sequelize,
-        timestamps: true,
+        timestamps: false,
         underscored: false,
         modelName: "NutritionalPlan",
         tableName: "nutritionalPlan",
