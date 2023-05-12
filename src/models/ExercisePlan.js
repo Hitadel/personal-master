@@ -26,6 +26,11 @@ module.exports = class ExercisePlan extends Sequelize.Model {
           allowNull: false,
           defaultValue: 0,
         },
+        check: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          defaultValue: false,
+        },
       },
       {
         sequelize,

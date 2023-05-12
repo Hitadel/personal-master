@@ -40,7 +40,12 @@ module.exports = class NutritionPlan extends Sequelize.Model {
           // INT
           type: Sequelize.DOUBLE,
           allowNull: false,
-        },          
+        },    
+        check: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          defaultValue: false,
+        },      
       },
       {
         sequelize,

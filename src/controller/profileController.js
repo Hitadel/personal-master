@@ -226,7 +226,7 @@ const profileChart = async (req, res, next) => {
     } else if (category == "exercise" || category == "exercisePlan") {
       if (category == "exercise")
       data = Motion;
-      else if (category == "exercisePlan")
+      else if (category == "exercisePlan" || category == "exercisePlanList")
       data = ExercisePlan;
       schema = { 
         time: ["아침", "점심", "저녁", "새벽"],
@@ -261,7 +261,6 @@ const profileChart = async (req, res, next) => {
 
     let profileData = await modelPeriodCalculator(date, req, period2, data, category, type);
     forEachFunction(profileData, result, period, date);
-
     return res.status(200).json(result);
   } catch(err) {
     console.error(err)
@@ -269,4 +268,52 @@ const profileChart = async (req, res, next) => {
   }
 } 
 
-export {indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, profileChart}
+const aiPlan = async (req, res, next) => {
+  try {
+    let { period, date, category, type } = req.body
+    let data
+    if (category == "nutritionPlan")
+    data = NutritionPlan
+    if (category == "exercisePlan")
+    data = ExercisePlan
+    category = undefined;
+    let period2
+    if (period === "day") period2 = 1
+    if (period === "week") period2 = 7
+    if (period === "month") period2 = 31
+    if (period === "year") period2 = 365
+    const result = await modelPeriodCalculator(date, req, period2, data, category, type);
+    console.log("디버그", result);
+    return res.status(200).json(result);
+  }catch(err) {
+    console.error(err)
+    return res.status(500).json({message: "서버 에러가 발생하였습니다."});
+  }
+}
+
+const checkPost = async (req, res, next) => {
+  try{
+    const {items, model} = req.body
+    console.log("디버그", items)
+    let data 
+    if (model == "NutritionPlan")
+      data = NutritionPlan
+    if (model == "ExercisePlan")
+      data = ExercisePlan
+       
+      for (const item of items) {
+        await data.update({
+          check: true
+        },
+        {
+          where: { id: item.id }
+        });
+      }
+    return res.status(200)
+  }catch(err) {
+    console.error(err)
+    return res.status(500).json({message: "서버 에러가 발생하였습니다."});
+  }
+}
+
+export {indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, profileChart, aiPlan, checkPost}
