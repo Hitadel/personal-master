@@ -293,14 +293,13 @@ const aiPlan = async (req, res, next) => {
 
 const checkPost = async (req, res, next) => {
   try{
-    const {items, model} = req.body
+    const {items, unCheckedItems, model} = req.body
     console.log("디버그", items)
     let data 
     if (model == "NutritionPlan")
       data = NutritionPlan
     if (model == "ExercisePlan")
       data = ExercisePlan
-       
       for (const item of items) {
         await data.update({
           check: true
@@ -309,7 +308,15 @@ const checkPost = async (req, res, next) => {
           where: { id: item.id }
         });
       }
-    return res.status(200)
+      for (const item of unCheckedItems) {
+        await data.update({
+          check: false
+        },
+        {
+          where: { id: item.id }
+        });
+      }
+    return res.status(200).json({result:true});
   }catch(err) {
     console.error(err)
     return res.status(500).json({message: "서버 에러가 발생하였습니다."});
