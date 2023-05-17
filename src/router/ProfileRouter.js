@@ -1,5 +1,5 @@
 import express from "express";
-import { indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, nutritionProfile, exerciseProfile } from "../controller/profileController";
+import { indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, nutritionProfile, exerciseProfile } from "../controller/ProfileController";
 import passport from "passport";
 
 const ProfileRouter = express.Router();
