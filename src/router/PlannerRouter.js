@@ -1,6 +1,6 @@
 import passport from "passport";
 const express = require("express");
-const plannerController = require("../controller/plannerController");
+const plannerController = require("../controller/PlannerController");
 
 const PlannerRouter = express.Router();
 

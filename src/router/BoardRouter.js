@@ -1,5 +1,5 @@
 import express from "express";
-import { createBoard, updateBoard, deleteBoard, showBoard, indexBoard, createComment, updateComment, deleteComment,  } from "../controller/boardController";
+import { createBoard, updateBoard, deleteBoard, showBoard, indexBoard, createComment, updateComment, deleteComment,  } from "../controller/BoardController";
 import passport from "passport";
 
 const BoardRouter = express.Router();
