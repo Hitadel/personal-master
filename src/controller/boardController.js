@@ -64,7 +64,7 @@ export const createBoard = async(req, res, next) => {
 
 export const updateBoard = async(req, res, next) => {
     try{
-        const {title, content, id} = req.body
+        const {title, content, id, category} = req.body
         if (!title || !content || !id)
         return res.status(400).json({ message: '필수값이 누락되었습니다.' });
         const result2 = await Board.findOne({

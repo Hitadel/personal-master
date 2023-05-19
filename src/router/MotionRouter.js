@@ -1,5 +1,5 @@
 import express from "express";
-import { saveMotion } from "../controller/MotionController";
+import { saveMotion } from "../controller/motionController";
 import passport from "passport";
 
 const MotionRouter = express.Router();

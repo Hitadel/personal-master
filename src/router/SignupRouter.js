@@ -1,5 +1,5 @@
 import express from "express";
-import { emailSend, signupCheck, signupPost } from "../controller/SignupController";
+import { emailSend, signupCheck, signupPost } from "../controller/signupController";
 
 const SignupRouter = express.Router();
 
