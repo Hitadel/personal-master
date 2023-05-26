@@ -41,7 +41,12 @@ module.exports = class User extends Sequelize.Model {
         salt: {
           type: Sequelize.STRING(100),
           allowNull: false,
-        }
+        },
+        sns_id: {
+          type: Sequelize.STRING(100),
+          allowNull: true,
+          unique: true,
+        },
       },
       {
         sequelize,
@@ -58,9 +63,10 @@ module.exports = class User extends Sequelize.Model {
   static associate(db) {
     db.User.hasMany(db.Motion, { foreignKey: "user_id", sourceKey: "id" });
     db.User.hasMany(db.Nutrition, { foreignKey: "user_id", sourceKey: "id" });
-    db.User.hasMany(db.Comment, { foreignKey: "user_id", sourceKey: "id" });
-    db.User.hasMany(db.Board, { foreignKey: "user_id", sourceKey: "id" });
-    db.User.hasMany(db.Board, { foreignKey: "user_name", sourceKey: "name" })
-    db.User.hasMany(db.Comment, { foreignKey: "user_name", sourceKey: "name" })
+    db.User.hasMany(db.Comment, { foreignKey: "user_id", sourceKey: "sns_id" });
+    db.User.hasMany(db.Post, { foreignKey: "user_id", sourceKey: "sns_id" });
+    db.User.hasMany(db.Follow, { foreignKey: "follower_id", sourceKey: "sns_id" });
+    db.User.hasMany(db.Follow, { foreignKey: "following_id", sourceKey: "sns_id" });
+    db.User.hasMany(db.Images, { foreignKey: "user_id", sourceKey: "sns_id" });
   }
 };

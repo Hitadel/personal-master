@@ -26,6 +26,11 @@ module.exports = class ExercisePlan extends Sequelize.Model {
           allowNull: false,
           defaultValue: 0,
         },
+        set: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: 0,
+        },
         check: {
           type: Sequelize.BOOLEAN,
           allowNull: false,
@@ -46,6 +51,6 @@ module.exports = class ExercisePlan extends Sequelize.Model {
   }
 
   static associate(db) {
-    db.ExercisePlan .belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
+    db.ExercisePlan.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
   }
-}
+};

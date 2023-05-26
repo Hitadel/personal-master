@@ -1,6 +1,6 @@
 import Sequelize from "sequelize";
 
-module.exports = class Board extends Sequelize.Model {
+module.exports = class Motion extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
@@ -10,37 +10,36 @@ module.exports = class Board extends Sequelize.Model {
           autoIncrement: true,
           primaryKey: true,
         },
-        title: {
+        user_id: {
+          type: Sequelize.INTEGER,
+          foreignKey: true,
+        },
+        type: {
           // STRING (100자까지), Null 허용 X
           type: Sequelize.STRING(100),
           allowNull: false,
         },
-        content: {
-          // TEXT, Null 허용 X
-          type: Sequelize.TEXT,
+        timer: {
+          // INT, Null 허용 X
+          type: Sequelize.INTEGER,
           allowNull: false,
         },
-        hit: {
-          // INT, 기본 값 : 0
+        count: {
+          // INT, Null 허용 X
           type: Sequelize.INTEGER,
-          defaultValue: 0,
+          allowNull: false,
         },
-        like: {
+        score: {
           type: Sequelize.INTEGER,
-          defaultValue: 0
-        },
-        category: {
-          // STRING (100자까지), 기본 값 : "일반"
-          type: Sequelize.STRING(100),
-          defaultValue: "일반",
+          allowNull: false,
         },
       },
       {
         sequelize,
         timestamps: true,
         underscored: false,
-        modelName: "Board",
-        tableName: "board",
+        modelName: "Motion",
+        tableName: "motion",
         paranoid: true,
         charset: "utf8",
         collate: "utf8_unicode_ci",
@@ -48,8 +47,6 @@ module.exports = class Board extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Board.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
-    db.Board.hasMany(db.Comment, { foreignKey: "board_id", sourceKey: "id"});
-    db.Board.belongsTo(db.User, { foreignKey: "user_name", targetKey: "name" });
+    db.Motion.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
   }
 };

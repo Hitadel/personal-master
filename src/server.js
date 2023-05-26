@@ -7,6 +7,8 @@ import cors from "cors";
 import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter, AuthRouter, ProfileRouter, PlannerRouter } from "./router";
 import passport from "passport";
 import passportConfig from "./middlewares/passport";
+import CommunityRouter from "./router/CommunityRouter";
+import PostRouter from "./router/PostRouter";
 const redis = require('redis');
 const redisClient = require('./config/redisConfig');
 const app = express();
@@ -47,7 +49,7 @@ app.use(express.urlencoded({ limit: "20mb", extended: false }));
 
 app.use(
   cors({
-    origin: [process.env.NODE_ENV === "development" ? process.env.DEV_CLIENT_DOMAIN : process.env.PRODUCT_CLIENT_DOMAIN, "http://localhost:3000"],
+    origin: [process.env.NODE_ENV === "development" ? process.env.DEV_CLIENT_DOMAIN : process.env.MY_DOMAIN, "http://localhost/"],
     credentials: true,
   })
 );
@@ -61,5 +63,7 @@ app.use("/auth", AuthRouter);
 app.use("/found_password", ResetPwRouter);
 app.use("/profile", ProfileRouter);
 app.use("/planner", PlannerRouter);
+app.use("/community", CommunityRouter);
+app.use("/post", PostRouter);
 
 export default app;
