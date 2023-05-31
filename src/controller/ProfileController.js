@@ -160,10 +160,10 @@ const forEachFunction = (model, input, period, date) => {
   }
   model.forEach((instances) => {
     let framework = {};
-    if (period === "day") time = new Date(instances.createdAt).getUTCHours(); // 발생 일자
-    else if (period === "week") time = new Date(instances.createdAt).getUTCDate(); // 발생 일자
-    else if (period === "month") time = new Date(instances.createdAt).getUTCDate(); // 발생 일자
-    else time = new Date(instances.createdAt).getUTCMonth() + 1; // 발생 일자
+    if (period === "day") time = new Date(instances.createdAt).getHours(); // 발생 일자
+    else if (period === "week") time = new Date(instances.createdAt).getDate(); // 발생 일자
+    else if (period === "month") time = new Date(instances.createdAt).getDate(); // 발생 일자
+    else time = new Date(instances.createdAt).getMonth() + 1; // 발생 일자
     for (const key in instances.dataValues) if (key !== "createdAt" || "type") framework[key] = instances.dataValues[key];
     if (period === "day") {
       if (time >= 0 && time < 5)
@@ -181,7 +181,7 @@ const forEachFunction = (model, input, period, date) => {
       return input;
     } else {
       if (period === "week") {
-        let currentDay = instances.createdAt.getUTCDate();
+        let currentDay = instances.createdAt.getDate();
         if (endDate > currentDay) {
           let modifiedEndDate = new Date(instances.createdAt.getFullYear(), instances.createdAt.getMonth(), 0).getDate() - endDate;
           timeIndex = currentDay + modifiedEndDate;
