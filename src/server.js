@@ -4,20 +4,22 @@ import path from "path";
 import db from "./models";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter, AuthRouter, ProfileRouter, PlannerRouter } from "./router";
 import passport from "passport";
 import passportConfig from "./middlewares/passport";
-const redis = require('redis');
+import { MotionRouter, BarcodeRouter, SignupRouter, BoardRouter, PassportRouter, ResetPwRouter, AuthRouter, ProfileRouter, PlannerRouter } from "./router";
+import CommunityRouter from "./router/CommunityRouter";
+import PostRouter from "./router/PostRouter";
+
 const redisClient = require('./config/redisConfig');
 const app = express();
 const logger = morgan("dev");
 
-//패스포트
-app.use(passport.initialize()); //passport 구동
-passportConfig();
-//패스포트
+// -- パスポート初期化
+app.use(passport.initialize());
+passportConfig(); // パスポート設定
+// パスポート --
 
-//redis
+// -- redis 設定
 redisClient.on('connect', function() {
   console.log('Redis client connected');
 });
@@ -25,34 +27,41 @@ redisClient.on('connect', function() {
 redisClient.on('error', function (err) {
   console.log('Redis client error:', err);
 });
-redisClient.connect().then();
+redisClient.connect()
 
-//redis
+// redis --
 
+// -- sequelize 設定
 db.sequelize
-  .sync({ force: false }) // force: true (저장할 때마다 DB 초기화) / force: false (기존 DB에 덮어쓰기)
+  .sync({ force: false }) // force: true (保存するたびにDBを初期化) / force: false (既存DBに上書き)
   .then(() => {
-    console.log("DB 연결 완료");
+    console.log("DB接続完了");
   })
   .catch((err) => {
     console.error(err);
   });
 
+// sequelize --
+
 app.use(cookieParser());
 app.use(logger);
 
+
+// publicフォルダへのアクセス権限付与
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb", extended: false }));
 
+// CORS 設定
 app.use(
   cors({
-    origin: [process.env.NODE_ENV === "development" ? process.env.DEV_CLIENT_DOMAIN : process.env.PRODUCT_CLIENT_DOMAIN, "http://localhost:3000"],
+    origin: [process.env.NODE_ENV === "development" ? process.env.DEV_CLIENT_DOMAIN : process.env.MY_DOMAIN, "http://localhost/"],
     credentials: true,
   })
 );
 
-app.use("/motion", MotionRouter); // MotionRouter 주소 부여, 연결
+// ルーティング
+app.use("/motion", MotionRouter);
 app.use("/signup", SignupRouter);
 app.use("/barcode", BarcodeRouter);
 app.use("/login", PassportRouter);
@@ -61,5 +70,7 @@ app.use("/auth", AuthRouter);
 app.use("/found_password", ResetPwRouter);
 app.use("/profile", ProfileRouter);
 app.use("/planner", PlannerRouter);
+app.use("/community", CommunityRouter);
+app.use("/post", PostRouter);
 
 export default app;

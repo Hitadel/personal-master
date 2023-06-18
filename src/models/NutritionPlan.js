@@ -5,7 +5,7 @@ module.exports = class NutritionPlan extends Sequelize.Model {
     return super.init(
       {
         id: {
-          // 고유키, INT, 자동 증가
+          // 固有鍵、INT、自動増加
           type: Sequelize.INTEGER,
           autoIncrement: true,
           primaryKey: true,
@@ -15,29 +15,27 @@ module.exports = class NutritionPlan extends Sequelize.Model {
           allowNull: false,
         },
         name: {
-          // STRING (100자까지), Null 허용 X
+          // STRING (100文字まで)、Null不可
           type: Sequelize.STRING(100),
           allowNull: false,
         },
         calorie: {
-          // INT, 기본 값 : 0
+          // INT、デフォルト値 : 0
           type: Sequelize.DOUBLE,
           allowNull: false,
           defaultValue: 0,
         },
-        protein: { // 단백질
-          // INT, 기본 값 : 0
+        protein: {
+          // INT、デフォルト値 : 0
           type: Sequelize.DOUBLE,
           allowNull: false,
           defaultValue: 0,
         },  
-        fat: { // 지방
-          // INT
+        fat: {
           type: Sequelize.DOUBLE,
           allowNull: false,
         },
-        cho: { // 탄수화물
-          // INT
+        cho: {
           type: Sequelize.DOUBLE,
           allowNull: false,
         },    

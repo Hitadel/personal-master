@@ -5,7 +5,6 @@ module.exports = class Motion extends Sequelize.Model {
     return super.init(
       {
         id: {
-          // 고유키, INT, 자동 증가
           type: Sequelize.INTEGER,
           autoIncrement: true,
           primaryKey: true,
@@ -15,17 +14,14 @@ module.exports = class Motion extends Sequelize.Model {
           foreignKey: true,
         },
         type: {
-          // STRING (100자까지), Null 허용 X
           type: Sequelize.STRING(100),
           allowNull: false,
         },
         timer: {
-          // INT, Null 허용 X
           type: Sequelize.INTEGER,
           allowNull: false,
         },
         count: {
-          // INT, Null 허용 X
           type: Sequelize.INTEGER,
           allowNull: false,
         },

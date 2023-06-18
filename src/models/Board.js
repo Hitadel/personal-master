@@ -5,23 +5,23 @@ module.exports = class Board extends Sequelize.Model {
     return super.init(
       {
         id: {
-          // 고유키, INT, 자동 증가
+          // 固有キー、INT、自動増加
           type: Sequelize.INTEGER,
           autoIncrement: true,
           primaryKey: true,
         },
         title: {
-          // STRING (100자까지), Null 허용 X
+          // STRING(100文字まで)、Null不可
           type: Sequelize.STRING(100),
           allowNull: false,
         },
         content: {
-          // TEXT, Null 허용 X
+          // TEXT、Null不可
           type: Sequelize.TEXT,
           allowNull: false,
         },
         hit: {
-          // INT, 기본 값 : 0
+          // INT、デフォルト値:0
           type: Sequelize.INTEGER,
           defaultValue: 0,
         },
@@ -30,7 +30,7 @@ module.exports = class Board extends Sequelize.Model {
           defaultValue: 0
         },
         category: {
-          // STRING (100자까지), 기본 값 : "일반"
+          // STRING(100文字まで)、デフォルト値:"一般"
           type: Sequelize.STRING(100),
           defaultValue: "일반",
         },

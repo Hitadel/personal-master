@@ -13,41 +13,39 @@ export const emailSend = async (req, res, next) => {
   const fromEmail = "younggo1701077@gmail.com";
   let toEmail = useremail;
 
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
   function sendEmail(toEmail, title, txt) {
     let transporter = nodemailer.createTransport({
-      host: smtpServerURL, //SMTP 서버 주소
-      secure: true, //보안 서버 사용 false로 적용시 port 옵션 추가 필요
+      host: smtpServerURL, // SMTPサーバーアドレス
+
+      secure: true, // セキュリティサーバーの使用をfalseに適用する場合、portオプションの追加が必要
       auth: {
-        user: authUser, //메일서버 계정
-        pass: authPass, //메일서버 비번
+        user: authUser, // メールサーバーアカウント
+        pass: authPass, // メールサーバーパスワード
       },
     });
 
     let mailOptions = {
-      from: fromEmail, //보내는 사람 주소
-      to: toEmail, //받는 사람 주소
-      subject: title, //제목
-      text: txt, //본문
+      from: fromEmail, // 送信アドレス
+      to: toEmail, // 発信アドレス
+      subject: title, // タイトル
+      text: txt, // 本文
     };
 
-    //전송 시작!
+    // 転送始め
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        //에러
         console.log(error);
       }
-      //전송 완료
+      // 転送完了
       console.log("Finish sending email : ");
       transporter.close();
     });
   }
-  sendEmail(toEmail, "The Weighter에서 보낸 인증메일입니다.", `인증 번호: ${sendEvfcode}`);
+  sendEmail(toEmail, "The Weighterからの認証メールです。", `認証番号: ${sendEvfcode}`);
   return res.json({ data: sendEvfcode });
 };
 
-// 이메일 전송
+// 電子メール転送
 export const signupCheck = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -68,7 +66,7 @@ export const signupCheck = async (req, res, next) => {
   }
 };
 
-// 계정 생성
+// アカウント作成
 export const signupPost = async (req, res, next) => {
   try {
     let { email, name, phone, gender} = req.body;
@@ -77,10 +75,10 @@ export const signupPost = async (req, res, next) => {
     const salt = pwdObj.createdSalt;
     const password = pwdObj.password;
 
-    // => 최종적으로 암호화된 비밀번호, salt 반환
-    // salt 반환 이유 : 각 유저의 비밀번호 암호화되는데 사용된 salt다르기 때문에, 유저마다 소유해야 비교 가능
+    // => 最終的に暗号化されたパスワードとSaltを保存
+    // salt保存理由:各ユーザのパスワード暗号化に使用されたSaltが異なるため、ユーザごとに所有していないと比較できない
 
-    // 레인보우 테이블 방지를 위한 salt
+    // レインボーテーブル防止のためのSalt
     if (gender == "male")
     gender = true;
     else 
@@ -98,6 +96,6 @@ export const signupPost = async (req, res, next) => {
     return res.status(200).json({result: true});
   } catch (err) {
     console.error(err);
-    return res.status(500).json({message: "서버 에러가 발생하였습니다."});
+    return res.status(500).json({message: "サーバーエラーが発生しました。"});
   }
 };

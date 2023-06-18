@@ -7,7 +7,6 @@ const BoardRouter = express.Router();
 BoardRouter.get("/index/:page/:limit", indexBoard);
 BoardRouter.get("/show/:id", showBoard);
 BoardRouter.post("/create", passport.authenticate('jwt', { session: false }), createBoard);
-// BoardRouter.post("/like", likeBoard);
 BoardRouter.post("/comment/create", passport.authenticate('jwt', { session: false }), createComment);
 BoardRouter.post("/comment/update", passport.authenticate('jwt', { session: false }), updateComment);
 BoardRouter.post("/comment/delete", passport.authenticate('jwt', { session: false }), deleteComment);

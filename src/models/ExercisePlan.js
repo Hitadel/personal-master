@@ -5,23 +5,28 @@ module.exports = class ExercisePlan extends Sequelize.Model {
     return super.init(
       {
         id: {
-          // 고유키, INT, 자동 증가
+          // 固有キー、INT、自動増加
           type: Sequelize.INTEGER,
           autoIncrement: true,
           primaryKey: true,
         },
         createdAt: {
           // INT
-          type: Sequelize.DATE, // dateTime 타입
+          type: Sequelize.DATE, // dateTimeタイプ
           allowNull: false,
         },
         type: {
-          // STRING (100자까지), Null 허용 X
+          // STRING(100文字まで)、Null不可
           type: Sequelize.STRING(100),
           allowNull: false,
         },
         count: {
-          // INT, 기본 값 : 0
+          // INT、デフォルト値:0
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: 0,
+        },
+        set: {
           type: Sequelize.INTEGER,
           allowNull: false,
           defaultValue: 0,
@@ -46,6 +51,6 @@ module.exports = class ExercisePlan extends Sequelize.Model {
   }
 
   static associate(db) {
-    db.ExercisePlan .belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
+    db.ExercisePlan.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
   }
-}
+};

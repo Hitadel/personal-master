@@ -1,5 +1,5 @@
 import express from "express";
-import { indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, profileChart, aiPlan, checkPost } from "../controller/ProfileController";
+import { indexProfile, personalModifyProfile, passwordConfirmProfile, passwordModifyProfile, statusModifyProfile, profileChart, aiPlan, checkPost, deletePost } from "../controller/ProfileController";
 import passport from "passport";
 
 const ProfileRouter = express.Router();
@@ -12,5 +12,7 @@ ProfileRouter.post("/statusModify", passport.authenticate("jwt", { session: fals
 ProfileRouter.post("/chart", passport.authenticate("jwt", { session: false }), profileChart);
 ProfileRouter.post("/aiPlan", passport.authenticate("jwt", { session: false }), aiPlan);
 ProfileRouter.post("/checkPost", passport.authenticate("jwt", { session: false }), checkPost);
+ProfileRouter.post("/deletePost", passport.authenticate("jwt", { session: false }), deletePost);
 
 export default ProfileRouter;
+

@@ -27,12 +27,12 @@ module.exports = class Status extends Sequelize.Model {
         disease: {
           type: Sequelize.STRING,
           allowNull: false,
-          defaultValue: "정보 없음",
+          defaultValue: "정보 없음",　//情報なし
         },
         allergy: {
           type: Sequelize.STRING,
           allowNull: false,
-          defaultValue: "정보 없음",
+          defaultValue: "정보 없음",　//情報なし
         },
       },
       {

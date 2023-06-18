@@ -5,13 +5,13 @@ module.exports = class Comment extends Sequelize.Model {
     return super.init(
       {
         id: {
-          // 고유키, INT, 자동 증가
+          // 固有キー、INT、自動増加
           type: Sequelize.INTEGER,
           autoIncrement: true,
           primaryKey: true,
         },
         content: {
-          // TEXT, Null 허용 X
+          // TEXT、Null不可
           type: Sequelize.TEXT,
           allowNull: false,
         },
@@ -29,8 +29,7 @@ module.exports = class Comment extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.Comment.belongsTo(db.User, { foreignKey: "user_name", targetKey: "name" });
-    db.Comment.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
-    db.Comment.belongsTo(db.Board, { foreignKey: "board_id", targetKey: "id", onDelete: "CASCADE"});
+    db.Comment.belongsTo(db.User, { foreignKey: "user_id", targetKey: "sns_id" });
+    db.Comment.belongsTo(db.Post, { foreignKey: "post_id", targetKey: "id", onDelete: "CASCADE" });
   }
 };

@@ -1,12 +1,13 @@
 import Board from "../models/Board";
 import Comment from "../models/Comment";
 
+// 投稿全体の読み込み
 export const indexBoard = async(req, res, next) => {
     try{
         let {page, limit} = req.params;
         if (!limit || !page)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
-        page = parseInt(page); //params로 넘어올 땐 전부 {page: '10'} 식으로 값이 모두 문자열로 오니까 바꿔줘야됨
+        return res.status(400).json({ message: '必須値が欠落しています。' });
+        page = parseInt(page); // paramsに来る時は全て{page: '10'}式で値が全て文字列で来るので変えなければならない。
         limit = parseInt(limit);
         const board = await Board.findAndCountAll({
             order: [['id', 'DESC']],
@@ -18,14 +19,16 @@ export const indexBoard = async(req, res, next) => {
           return res.status(200).json({ count, rows });
     }catch(err){
         console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+        return res.status(500).json({message: 'サーバーエラーが発生しました。'});
     }
 }
+
+// 投稿閲覧
 export const showBoard = async(req, res, next) => {
     try{
         const {id} = req.params;
         if (!id)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
+        return res.status(400).json({ message: '必須値が欠落しています。' });
         const board = await Board.findOne({
             where: {id}
         })
@@ -40,14 +43,15 @@ export const showBoard = async(req, res, next) => {
         return res.status(200).json({board, comment});
     }catch(err){
         console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+        return res.status(500).json({message: 'サーバーエラーが発生しました。'});
     }
 }
+// 投稿する
 export const createBoard = async(req, res, next) => {
     try{
         const {title, content, category} = req.body
         if (!title || !content)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
+        return res.status(400).json({ message: '必須値が欠落しています。' });
         await Board.create({
             title,
             content,
@@ -58,15 +62,15 @@ export const createBoard = async(req, res, next) => {
         return res.status(200).json({result: true});
     }catch(err){
         console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+        return res.status(500).json({message: 'サーバーエラーが発生しました。'});
     }
 }
-
+// 投稿編集
 export const updateBoard = async(req, res, next) => {
     try{
         const {title, content, id, category} = req.body
         if (!title || !content || !id)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
+        return res.status(400).json({ message: '必須値が欠落しています。' });
         const result2 = await Board.findOne({
             where: {id}
         });
@@ -83,35 +87,19 @@ export const updateBoard = async(req, res, next) => {
         return res.status(200).json({result: true});
     }
     else 
-    return  res.status(403).json({message: "해당 리소스에 접근할 권한이 없습니다."})
+    return  res.status(403).json({message: "当該リソースにアクセスする権限がありません。"})
     }catch(err){
         console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+        return res.status(500).json({message: 'サーバーエラーが発生しました。'});
     }
 }
 
-// export const likeBoard = async(req, res, next) => {
-//     try{
-//         const {like, id} = req.body
-//         if (!like || !id)
-//         return res.status(400).json({ message: '필수값이 누락되었습니다.' });
-//         const result = await Board.update({
-//             like: like + 1
-//         },
-//             {where: {id}}
-//     )
-//         return res.status(200).json({result: true});
-//     }catch(err){
-//         console.error(err);
-//         return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
-//     }
-// }
-
+// 投稿削除
 export const deleteBoard = async(req, res, next) => {
     try{
         const {id} = req.body
         if (!id)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
+        return res.status(400).json({ message: '必須値が欠落しています。' });
         const board = await Board.findOne({
             where: {id}
         });
@@ -125,18 +113,19 @@ export const deleteBoard = async(req, res, next) => {
         return res.status(200).json({result: true});
     }
     else 
-    return  res.status(403).json({message: "해당 리소스에 접근할 권한이 없습니다."})
+    return  res.status(403).json({message: "当該リソースにアクセスする権限がありません。"})
     }catch(err){
         console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+        return res.status(500).json({message: 'サーバーエラーが発生しました。'});
     }
 }
 
+// コメントする
 export const createComment = async(req, res, next) => {
     try{
         const {content, board_id} = req.body
         if (!content || !board_id)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
+        return res.status(400).json({ message: '必須値が欠落しています。' });
         const result = await Comment.create({
             content,
             user_id: req.user.id,
@@ -149,16 +138,16 @@ export const createComment = async(req, res, next) => {
         return res.status(200).json({comment});
     }catch(err){
         console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+        return res.status(500).json({message: 'サーバーエラーが発生しました。'});
     }
 }
-
+// コメント編集
 export const updateComment = async(req, res, next) => {
     try{
         let {content, id, board_id} = req.body
         if (!board_id || !content || !id)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
-        content += " (수정됨)"
+        return res.status(400).json({ message: '必須値が欠落しています。' });
+        content += " (수정됨)" // 該当コメントが編集されたコメントなのか表示するためのコード
         const comment = await Comment.findOne({
             where: {id}
         });
@@ -174,19 +163,20 @@ export const updateComment = async(req, res, next) => {
         return res.status(200).json({result: true});
     }
     else 
-    return  res.status(403).json({message: "해당 리소스에 접근할 권한이 없습니다."})
+    return  res.status(403).json({message: "当該リソースにアクセスする権限がありません。"})
 
     }catch(err){
         console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+        return res.status(500).json({message: 'サーバーエラーが発生しました。'});
     }
 }
 
+// コメント削除
 export const deleteComment = async(req, res, next) => {
     try{
         const {id} = req.body
         if (!id)
-        return res.status(400).json({ message: '필수값이 누락되었습니다.' });
+        return res.status(400).json({ message: '必須値が欠落しています。' });
         const comment = await Comment.findOne({
             where: {id}
         })
@@ -197,10 +187,10 @@ export const deleteComment = async(req, res, next) => {
             return res.status(200).json({result: true});
         }
         else 
-        return  res.status(403).json({message: "해당 리소스에 접근할 권한이 없습니다."})
+        return  res.status(403).json({message: "当該リソースにアクセスする権限がありません。"})
 
     }catch(err){
         console.error(err);
-        return res.status(500).json({message: '서버 에러가 발생하였습니다.'});
+        return res.status(500).json({message: 'サーバーエラーが発生しました。'});
     }
 }

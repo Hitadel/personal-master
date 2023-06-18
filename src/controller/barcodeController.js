@@ -1,7 +1,13 @@
+// フロントから受け取った栄養情報をNutritionテーブルに保存
+
 import Nutrition from "../models/Nutrition";
 
 export const saveBarcode = async (req, res, next) => {
   try {
+    // このfor文はフロントから受け取った栄養情報の中から、数字で受け取るべき情報（カロリーなど）が漏れがある場合、
+    // NaNに伝達されエラーが発生します。 
+    // それを防止するために数字で受け取る情報だけを抽出し、
+    // NaNの場合は0に変えるコードです。
     for (const key in req.body.data){
       if(key == "DESC_KOR" || key == "ANIMAL_PLANT")
       continue;
